@@ -1,0 +1,25 @@
+plugins {
+    id 'maven'
+}
+
+group "${GROUP_ID}"
+version "${VERSION}"
+
+subprojects {
+    group "${GROUP_ID}"
+    version "${VERSION}"
+    apply plugin: 'java'
+    apply plugin: 'maven'
+    sourceCompatibility = "${JDK}"
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        testImplementation "junit:junit:${JUNIT}"
+    }
+    tasks.withType(JavaCompile) {
+        options.encoding = "UTF-8"
+    }
+}
+
+dependencies {}
