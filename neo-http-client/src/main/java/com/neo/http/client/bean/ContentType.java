@@ -1,4 +1,4 @@
-package com.neo.http.client;
+package com.neo.http.client.bean;
 
 /**
  * 内容类型常量

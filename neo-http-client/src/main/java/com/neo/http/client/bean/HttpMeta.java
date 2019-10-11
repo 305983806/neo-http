@@ -1,7 +1,5 @@
 package com.neo.http.client.bean;
 
-import com.neo.http.client.ContentType;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,7 +12,7 @@ import java.util.Map;
  */
 public class HttpMeta {
 
-    String contentType = ContentType.APPLICATION_JSON;
+    String contentType;
 
     Map<String, String> headers = new HashMap<>();
 

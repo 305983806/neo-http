@@ -1,4 +1,4 @@
-package com.neo.http.client;
+package com.neo.http.client.bean;
 
 public enum HttpType {
     OK_HTTP,

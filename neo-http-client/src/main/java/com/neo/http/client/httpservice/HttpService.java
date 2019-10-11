@@ -1,5 +1,7 @@
-package com.neo.http.client;
+package com.neo.http.client.httpservice;
 
+import com.neo.http.client.executor.Executor;
+import com.neo.http.client.bean.HttpType;
 import com.neo.http.client.bean.HttpMeta;
 
 /**
@@ -84,7 +86,7 @@ public interface HttpService {
      * @return
      * </pre>
      */
-    <T, E> T execute(RequestExecutor<T, E> executor, String uri, E data);
+    <T, E> T execute(Executor<T, E> executor, String uri, E data);
 
     /**
      * 用于给调用端设置服务的端点
