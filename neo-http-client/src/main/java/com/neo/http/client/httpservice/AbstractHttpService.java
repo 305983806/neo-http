@@ -3,7 +3,7 @@ package com.neo.http.client.httpservice;
 import com.neo.http.client.*;
 import com.neo.http.client.bean.ContentType;
 import com.neo.http.client.bean.HttpMeta;
-import com.neo.http.client.bean.HttpType;
+import com.neo.http.client.bean.Response;
 import com.neo.http.client.executor.*;
 import jodd.http.HttpException;
 import org.slf4j.Logger;

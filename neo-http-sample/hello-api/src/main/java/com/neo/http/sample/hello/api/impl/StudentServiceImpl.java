@@ -21,9 +21,10 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Student getStudent(String name) {
-        String repo
-        String url = endpoint +
-        return null;
+    public void getStudent(String name) {
+        String uri = "/student/get?name=" +name;
+        String url = endpoint + uri;
+        httpService.get(url, null);
+
     }
 }

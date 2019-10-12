@@ -1,5 +1,7 @@
 package com.neo.http.client;
 
+import com.neo.http.client.bean.Error;
+
 /**
  * @Author: cp.Chen
  * @since:
@@ -7,8 +9,14 @@ package com.neo.http.client;
  */
 public class NeoHttpException extends RuntimeException {
 
+    private Error error;
+
     public NeoHttpException() {
         super();
+    }
+
+    public NeoHttpException(Error error) {
+        this.error = error;
     }
 
     public NeoHttpException(String message) {
