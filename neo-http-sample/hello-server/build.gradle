@@ -1,0 +1,8 @@
+dependencies {
+    compile "org.slf4j:slf4j-api:${SLF4J}"
+    compile("com.alibaba:fastjson:${FASTJSON}")
+    compile ("org.springframework.boot:spring-boot-starter-web:${SPRINGBOOT}")
+    compile ("org.springframework.boot:spring-boot-starter-aop:${SPRINGBOOT}")
+
+    compile project(":neo-http-server")
+}

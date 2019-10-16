@@ -1,3 +1,4 @@
 dependencies {
     compile "org.slf4j:slf4j-api:${SLF4J}"
+    compile("com.alibaba:fastjson:${FASTJSON}")
 }

@@ -15,6 +15,7 @@ subprojects {
         jcenter()
     }
     dependencies {
+        implementation "org.springframework.boot:spring-boot-devtools:${SPRINGBOOT}"
         testImplementation "junit:junit:${JUNIT}"
     }
     tasks.withType(JavaCompile) {
