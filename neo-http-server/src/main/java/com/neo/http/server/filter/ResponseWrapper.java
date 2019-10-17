@@ -1,4 +1,4 @@
-package com.neo.http.server;
+package com.neo.http.server.filter;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.WriteListener;
@@ -25,7 +25,7 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
     }
 
     @Override
-    public ServletOutputStream getOutputStream() throws IOException {
+    public ServletOutputStream getOutputStream() {
         return out;
     }
 

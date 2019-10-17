@@ -2,11 +2,13 @@ package com.neo.http.sample.hello.server.common;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
-import com.neo.http.common.bean.DefaultError;
-import com.neo.http.sample.hello.server.common.utils.ThreadMDCUtil;
+import com.neo.http.server.Constants;
+import com.neo.http.common.bean.NeoError;
+import com.neo.http.server.utils.ThreadMDCUtil;
 import com.neo.http.server.HttpResponse;
-import com.neo.http.server.ResponseWrapper;
-import org.springframework.context.annotation.Configuration;
+import com.neo.http.server.filter.ResponseWrapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -19,9 +21,14 @@ import java.io.IOException;
  * @since:
  * @date: 2019-10-15 10:35
  */
-@Configuration
 @WebFilter(filterName = "logFilter", urlPatterns = "/*")
 public class LogFilter implements Filter {
+    private static final Logger logger = LoggerFactory.getLogger(LogFilter.class);
+
+    @Override
+    public void init(FilterConfig filterConfig){
+//        logger.info("Starting Filter:[{}]", LogFilter.class.getSimpleName());
+    }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -41,9 +48,9 @@ public class LogFilter implements Filter {
             String str = new String(content, "UTF-8");
             ServletOutputStream out = response.getOutputStream();
 
-            DefaultError error = null;
+            NeoError error = null;
             try {
-                error = JSON.parseObject(str, DefaultError.class);
+                error = JSON.parseObject(str, NeoError.class);
                 if (error.getCode() != null) {
                     buildResponse(error);
                 }
@@ -58,12 +65,12 @@ public class LogFilter implements Filter {
         }
     }
 
-    private String buildResponse(DefaultError error) {
+    private String buildResponse(NeoError error) {
         HttpResponse response = new HttpResponse();
         response.setRequestId(ThreadMDCUtil.getRequestId());
         response.setCode(error.getCode());
         response.setMessage(error.getMessage());
-
+        return null;
     }
 
     private String buildResponse(String content) {

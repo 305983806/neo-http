@@ -1,4 +1,4 @@
-package com.neo.http.sample.hello.server.common.utils;
+package com.neo.http.server.utils;
 
 import java.util.UUID;
 

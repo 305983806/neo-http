@@ -1,6 +1,6 @@
-package com.neo.http.sample.hello.server.common.utils;
+package com.neo.http.server.utils;
 
-import com.neo.http.sample.hello.server.common.Constants;
+import com.neo.http.server.Constants;
 import org.slf4j.MDC;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.util.concurrent.ListenableFuture;

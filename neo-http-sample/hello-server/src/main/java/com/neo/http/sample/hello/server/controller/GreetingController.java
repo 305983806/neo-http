@@ -17,7 +17,8 @@ public class GreetingController {
     private final AtomicLong counter = new AtomicLong();
 
     @RequestMapping("/greeting")
-    public Greeting greeting(@RequestParam(value = "name", defaultValue = "world") String name) {
+    public Greeting greeting(@RequestParam String name) {
+//        throw new NeoHttpException(HelloError.TEST_ERROR);
         return new Greeting(counter.incrementAndGet(), String.format(template, name));
     }
 

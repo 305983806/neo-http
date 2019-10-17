@@ -1,6 +1,9 @@
 package com.neo.http.sample.hello.server.common.config;
 
-import com.neo.http.sample.hello.server.common.utils.ThreadMDCUtil;
+import com.neo.http.sample.hello.server.common.LogFilter;
+import com.neo.http.server.filter.HttpFilter;
+import com.neo.http.server.utils.ThreadMDCUtil;
+import com.neo.http.server.RestExceptionHandler;
 import org.slf4j.MDC;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +21,7 @@ import java.util.concurrent.Future;
 @Configuration
 public class DefaultConfig {
 
-    @Bean("SpExecutor")
+    @Bean
     public Executor asyncExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor() {
             @Override
@@ -37,4 +40,22 @@ public class DefaultConfig {
         return executor;
     }
 
+    @Bean
+    public RestExceptionHandler restExceptionHandler() {
+        return new RestExceptionHandler();
+    }
+
+//    @Bean
+//    public FilterRegistrationBean registFilter(LogFilter logFilter) {
+//        FilterRegistrationBean registration = new FilterRegistrationBean();
+//        registration.setFilter(logFilter);
+//        registration.addUrlPatterns("/*");
+//        registration.setName(LogFilter.class.getSimpleName());
+//        return registration;
+//    }
+
+    @Bean
+    public HttpFilter httpFilter() {
+        return new HttpFilter();
+    }
 }

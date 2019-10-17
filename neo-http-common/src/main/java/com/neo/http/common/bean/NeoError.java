@@ -9,19 +9,19 @@ import java.io.Serializable;
  * @since:
  * @date: 2019-10-12 10:22
  */
-public class DefaultError implements Error, Serializable {
+public class NeoError implements Error, Serializable {
     private String code;
     private String message;
 
-    public DefaultError() {}
+    public NeoError() {}
 
-    public DefaultError(String code, String message) {
+    public NeoError(String code, String message) {
         this.code = code;
         this.message = message;
     }
 
-    public static DefaultError fromJson(String json) {
-        return JSON.parseObject(json, DefaultError.class);
+    public static NeoError fromJson(String json) {
+        return JSON.parseObject(json, NeoError.class);
     }
 
     public String toJson() {
