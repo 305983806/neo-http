@@ -1,8 +1,10 @@
 package com.neo.http.client.httpservice;
 
+import com.neo.http.client.bean.ClientError;
 import com.neo.http.client.bean.ContentType;
 import com.neo.http.client.bean.HttpMeta;
 import com.neo.http.client.executor.*;
+import com.neo.http.client.lang.HttpClientException;
 import com.neo.http.common.lang.NeoHttpException;
 import jodd.http.HttpException;
 import org.slf4j.Logger;
@@ -23,6 +25,8 @@ public abstract class AbstractHttpService implements HttpService {
 
     // 超时时间，单位：毫秒，黑夜10秒
     private int timeout = 10000;
+
+    private int retrySleepMillis = 1000;
 
     private int maxRetryTimes = 2;
 
@@ -85,6 +89,20 @@ public abstract class AbstractHttpService implements HttpService {
                 return this.executeInternal(executor, uri, data);
             } catch (NeoHttpException e) {
                 //TODO 对错误码的处理
+                ClientError error = e.getError();
+
+                // -1，系统繁忙，1000ms后重试
+                if (error.getCode() != null && "-1".equals(error.getCode())) {
+                    int sleepMillis = this.retrySleepMillis * (1 << retryTimes);
+                    try {
+                        logger.warn("系统繁忙，{} s 后重试(第{}次)", sleepMillis/1000, retryTimes+1);
+                        Thread.sleep(sleepMillis);
+                    } catch (InterruptedException e1) {
+                        throw new RuntimeException(e1);
+                    }
+                } else {
+                    throw e;
+                }
             }
         } while (retryTimes++ < this.maxRetryTimes);
         //TODO 抛出超出重试次数异常
@@ -94,11 +112,13 @@ public abstract class AbstractHttpService implements HttpService {
     public <T, E> T executeInternal (Executor<T, E> executor, String uri, E data) {
         try {
             T result = executor.execute(uri, data);
-            return result;
-        } catch (NeoHttpException e) {
             if (logger.isDebugEnabled()) {
-                //TODO 日志输出
+                logger.debug("\n[url]: {}\n[params]: {}\n[result]: {}", uri, data, result);
             }
+            return result;
+        } catch (HttpClientException e) {
+            ClientError error = e.getClientError();
+            logger.error(String.format("\n[url]: %s\n[params]: %s\n[errmsg]: %s", e.getMessage()), e);
             throw e;
         } catch (HttpException e) {
             //TODO 日志输出
