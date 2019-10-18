@@ -1,4 +1,4 @@
-package com.neo.http.server.filter;
+package com.neo.http.server.filter.wrapper;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.WriteListener;

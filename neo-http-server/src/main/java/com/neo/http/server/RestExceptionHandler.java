@@ -1,8 +1,7 @@
 package com.neo.http.server;
 
 import com.alibaba.fastjson.JSONObject;
-import com.neo.http.common.BusinessException;
-import com.neo.http.common.NeoHttpException;
+import com.neo.http.common.lang.NeoHttpException;
 import com.neo.http.common.bean.Error;
 import com.neo.http.common.bean.SystemError;
 import org.slf4j.Logger;
@@ -34,7 +33,7 @@ import java.util.Set;
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     private static final Logger logger = LoggerFactory.getLogger(RestExceptionHandler.class);
 
-    @ExceptionHandler({NeoHttpException.class, BusinessException.class})
+    @ExceptionHandler({NeoHttpException.class})
     public ResponseEntity handleNeoHttpException(NeoHttpException e) {
         Error error = e.getError();
         return new ResponseEntity(getJSONError(error), HttpStatus.OK);

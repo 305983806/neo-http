@@ -1,6 +1,8 @@
 package com.neo.http.server;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 
 import java.io.Serializable;
 
@@ -11,16 +13,20 @@ import java.io.Serializable;
  */
 public class HttpResponse<T> implements Serializable {
 
+    @JSONField(ordinal = 1)
     private String requestId;
 
+    @JSONField(ordinal = 2)
     private String code;
 
+    @JSONField(ordinal = 3)
     private String message;
 
+    @JSONField(ordinal = 4)
     T result;
 
     public String toJson() {
-        return JSON.toJSONString(this);
+        return JSON.toJSONString(this, SerializerFeature.SortField);
     }
 
     public String getRequestId() {

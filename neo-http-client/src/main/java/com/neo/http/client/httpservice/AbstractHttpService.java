@@ -1,10 +1,9 @@
 package com.neo.http.client.httpservice;
 
-import com.neo.http.client.*;
 import com.neo.http.client.bean.ContentType;
 import com.neo.http.client.bean.HttpMeta;
-import com.neo.http.client.bean.Response;
 import com.neo.http.client.executor.*;
+import com.neo.http.common.lang.NeoHttpException;
 import jodd.http.HttpException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +27,11 @@ public abstract class AbstractHttpService implements HttpService {
     private int maxRetryTimes = 2;
 
     private HttpMeta meta;
+
+    @Override
+    public String get(String url) {
+        return this.get(url, null);
+    }
 
     @Override
     public String get(String url, String queryParam) {

@@ -1,4 +1,4 @@
-package com.neo.http.client.bean;
+package com.neo.http.common.bean;
 
 import com.alibaba.fastjson.JSON;
 
@@ -9,25 +9,26 @@ import java.io.Serializable;
  * @since:
  * @date: 2019-10-12 10:22
  */
-public class Error implements Serializable {
+public class HttpServerError implements Error, Serializable {
     private String code;
     private String message;
 
-    public Error() {}
+    public HttpServerError() {}
 
-    public Error(String code, String message) {
+    public HttpServerError(String code, String message) {
         this.code = code;
         this.message = message;
     }
 
-    public static Error fromJson(String json) {
-        return JSON.parseObject(json, Error.class);
+    public static HttpServerError fromJson(String json) {
+        return JSON.parseObject(json, HttpServerError.class);
     }
 
     public String toJson() {
         return JSON.toJSONString(this);
     }
 
+    @Override
     public String getCode() {
         return code;
     }
@@ -36,6 +37,7 @@ public class Error implements Serializable {
         this.code = code;
     }
 
+    @Override
     public String getMessage() {
         return message;
     }

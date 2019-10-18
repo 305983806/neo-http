@@ -1,5 +1,10 @@
 package com.neo.http.sample.hello.api;
 
+import com.neo.http.sample.hello.api.bean.Course;
+import com.neo.http.sample.hello.api.bean.Courses;
+
+import java.util.Set;
+
 /**
  * @Author: cp.Chen
  * @since:
@@ -7,6 +12,6 @@ package com.neo.http.sample.hello.api;
  */
 public interface HelloService {
 
-    StudentService getStudentService();
+    Courses getCourse(String name);
 
 }

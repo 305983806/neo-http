@@ -1,9 +1,14 @@
 package com.neo.http.client.executor.jodd;
 
-import com.neo.http.client.NeoHttpException;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
+import com.neo.http.client.bean.HttpClientError;
 import com.neo.http.client.bean.Response;
+import com.neo.http.client.bean.ClientError;
 import com.neo.http.client.executor.AbstractGetExecutor;
 import com.neo.http.client.httpservice.HttpService;
+import com.neo.http.client.lang.HttpClientException;
+import com.neo.http.common.lang.NeoHttpException;
 import jodd.http.HttpRequest;
 import jodd.http.HttpResponse;
 import jodd.util.StringPool;
@@ -42,14 +47,18 @@ public class JoddGetExecutor extends AbstractGetExecutor {
 
         String respBody = resp.bodyText();
 
-        Response response = Response.fromJson(respBody);
-        switch (response.getStatus()) {
-            case "OK":
-                return response.getResult();
-            case "FAIL":
-                throw new NeoHttpException(response.getError());
-            default:
-                throw new NeoHttpException(String.format("Unknown response status %s has bean re", response.getStatus()));
+        try {
+            Response response = Response.fromJson(respBody);
+            if (response.getCode() != null && !"0".equals(response.getCode())) {
+                throw new HttpClientException(new HttpClientError(
+                        response.getRequestId(),
+                        response.getCode(),
+                        response.getMessage()
+                ));
+            }
+            return JSON.toJSONString(response.getResult());
+        } catch (JSONException e) {
+            return respBody;
         }
     }
 }

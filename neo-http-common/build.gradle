@@ -1,4 +1,6 @@
 dependencies {
     compile "org.slf4j:slf4j-api:${SLF4J}"
     compile("com.alibaba:fastjson:${FASTJSON}")
+    compile "org.jodd:jodd-core:${JODD}"
+    compile "commons-codec:commons-codec:${CODEC}"
 }

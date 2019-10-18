@@ -1,4 +1,4 @@
-package com.neo.http.sample.hello;
+package com.neo.http.sample.hello.api;
 
 /**
  * @Author: cp.Chen

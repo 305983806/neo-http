@@ -5,4 +5,5 @@ dependencies {
     compile ("org.springframework.boot:spring-boot-starter-aop:${SPRINGBOOT}")
 
     compile project(":neo-http-server")
+    compile project(":neo-http-sample:hello-api")
 }

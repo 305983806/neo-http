@@ -2,11 +2,11 @@ package com.neo.http.server.filter;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
-import com.neo.http.common.NeoHttpException;
-import com.neo.http.common.bean.NeoError;
+import com.neo.http.common.bean.HttpServerError;
 import com.neo.http.common.bean.SystemError;
 import com.neo.http.server.Constants;
 import com.neo.http.server.HttpResponse;
+import com.neo.http.server.filter.wrapper.ResponseWrapper;
 import com.neo.http.server.utils.ThreadMDCUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +16,6 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
 /**
  * @Author: cp.Chen
@@ -29,7 +28,7 @@ public class HttpFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) {
-        logger.info("Starting Filter:[{}]", HttpFilter.class.getSimpleName());
+        logger.info("Initializing Filter:[{}]", this.getClass().getSimpleName());
     }
 
     @Override
@@ -57,8 +56,7 @@ public class HttpFilter implements Filter {
         Object result = null;
 
         try {
-            NeoError error = NeoError.fromJson(body);
-
+            HttpServerError error = HttpServerError.fromJson(body);
             if (error.getCode() == null) {
                 code = SystemError.SYS_OK.getCode();
                 message = SystemError.SYS_OK.getMessage();

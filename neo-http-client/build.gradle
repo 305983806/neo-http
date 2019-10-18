@@ -2,4 +2,6 @@ dependencies {
     compile "org.slf4j:slf4j-api:${SLF4J}"
     compile "org.jodd:jodd-http:${JODD_HTTP}"
     compile("com.alibaba:fastjson:${FASTJSON}")
+
+    compile project(":neo-http-common")
 }

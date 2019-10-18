@@ -1,6 +1,6 @@
-package com.neo.http.client;
+package com.neo.http.common.lang;
 
-import com.neo.http.client.bean.Error;
+import com.neo.http.common.bean.Error;
 
 /**
  * @Author: cp.Chen
@@ -33,5 +33,9 @@ public class NeoHttpException extends RuntimeException {
 
     protected NeoHttpException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
+    }
+
+    public Error getError() {
+        return error;
     }
 }

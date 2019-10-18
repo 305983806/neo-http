@@ -1,7 +1,7 @@
 package com.neo.http.sample.hello.server.controller;
 
-import com.neo.http.common.NeoHttpException;
-import com.neo.http.sample.hello.server.bean.Greeting;
+import com.neo.http.common.lang.NeoHttpException;
+import com.neo.http.sample.hello.api.bean.Greeting;
 import com.neo.http.sample.hello.server.common.HelloError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,8 +17,7 @@ public class GreetingController {
     private final AtomicLong counter = new AtomicLong();
 
     @RequestMapping("/greeting")
-    public Greeting greeting(@RequestParam String name) {
-//        throw new NeoHttpException(HelloError.TEST_ERROR);
+    public Greeting greeting(@RequestParam(name = "name", defaultValue = "world") String name) {
         return new Greeting(counter.incrementAndGet(), String.format(template, name));
     }
 

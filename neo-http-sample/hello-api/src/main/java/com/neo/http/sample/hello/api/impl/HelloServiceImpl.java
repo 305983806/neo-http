@@ -1,21 +1,26 @@
 package com.neo.http.sample.hello.api.impl;
 
-import com.neo.http.client.httpservice.JoddHttpService;
+import com.neo.http.client.httpservice.HttpService;
 import com.neo.http.sample.hello.api.HelloService;
-import com.neo.http.sample.hello.api.StudentService;
+import com.neo.http.sample.hello.api.bean.Courses;
 
 /**
  * @Author: cp.Chen
  * @since:
- * @date: 2019-10-11 18:23
+ * @date: 2019-10-18 15:53
  */
-public class HelloServiceImpl extends JoddHttpService implements HelloService {
+public class HelloServiceImpl implements HelloService {
 
-    private StudentService studentService = new StudentServiceImpl(this);
+    private HttpService httpService;
 
-    @Override
-    public StudentService getStudentService() {
-        return this.studentService;
+    public HelloServiceImpl(HttpService httpService) {
+        this.httpService = httpService;
     }
 
+    @Override
+    public Courses getCourse(String name) {
+        String url = httpService.getEndpoint() + "/course?name=" + name;
+        String res = httpService.get(url);
+        return Courses.fromJSon(res);
+    }
 }

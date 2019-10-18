@@ -3,10 +3,10 @@ package com.neo.http.sample.hello.server.common;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.neo.http.server.Constants;
-import com.neo.http.common.bean.NeoError;
+import com.neo.http.common.bean.HttpServerError;
 import com.neo.http.server.utils.ThreadMDCUtil;
 import com.neo.http.server.HttpResponse;
-import com.neo.http.server.filter.ResponseWrapper;
+import com.neo.http.server.filter.wrapper.ResponseWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,9 +48,9 @@ public class LogFilter implements Filter {
             String str = new String(content, "UTF-8");
             ServletOutputStream out = response.getOutputStream();
 
-            NeoError error = null;
+            HttpServerError error = null;
             try {
-                error = JSON.parseObject(str, NeoError.class);
+                error = JSON.parseObject(str, HttpServerError.class);
                 if (error.getCode() != null) {
                     buildResponse(error);
                 }
@@ -65,7 +65,7 @@ public class LogFilter implements Filter {
         }
     }
 
-    private String buildResponse(NeoError error) {
+    private String buildResponse(HttpServerError error) {
         HttpResponse response = new HttpResponse();
         response.setRequestId(ThreadMDCUtil.getRequestId());
         response.setCode(error.getCode());

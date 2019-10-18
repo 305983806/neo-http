@@ -14,14 +14,14 @@ public class Response implements Serializable {
     // 该条查询的记录id，主要用于排查问题使用
     private String requestId;
 
-    // 执行结果，OK为成功，FAIL为失败
-    private String status;
+    // 错误码
+    private String code;
+
+    // 错误信息
+    private String message;
 
     // 实际返回结果，如果沒有返回结果，则为null
     private String result;
-
-    // 错误内容
-    private Error error;
 
     public static Response fromJson(String json) {
         return JSON.parseObject(json, Response.class);
@@ -35,12 +35,20 @@ public class Response implements Serializable {
         this.requestId = requestId;
     }
 
-    public String getStatus() {
-        return status;
+    public String getCode() {
+        return code;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public String getResult() {
@@ -49,13 +57,5 @@ public class Response implements Serializable {
 
     public void setResult(String result) {
         this.result = result;
-    }
-
-    public Error getError() {
-        return error;
-    }
-
-    public void setError(Error error) {
-        this.error = error;
     }
 }

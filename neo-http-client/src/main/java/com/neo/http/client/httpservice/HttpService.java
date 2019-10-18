@@ -16,6 +16,13 @@ public interface HttpService {
     /**
      * 针对所有API中的 GET 请求
      * @param url
+     * @return
+     */
+    String get(String url);
+
+    /**
+     * 针对所有API中的 GET 请求
+     * @param url
      * @param queryParam
      * @return
      */
