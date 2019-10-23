@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @since:
  * @date: 2019-10-15 09:55
  */
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.neo.*"})
 public class Server {
 
     public static void main(String[] args) {

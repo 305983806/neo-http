@@ -6,7 +6,6 @@ import com.neo.http.sample.hello.client.bean.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashSet;
@@ -18,7 +17,7 @@ import java.util.Set;
  * @since:
  * @date: 2019-10-18 12:10
  */
-@RestController("/hello")
+@RestController
 public class HelloController {
 
     @Autowired
@@ -41,7 +40,7 @@ public class HelloController {
         Iterator<Student> i = students.iterator();
         while (i.hasNext()) {
             Student s = i.next();
-            if (name.equals(i.next().getName())) {
+            if (name.equals(s.getName())) {
                 student = s;
                 break;
             }
@@ -49,7 +48,7 @@ public class HelloController {
 
         // 获得课程列表
         Courses courses = factory.getHelloService().getCourse(name);
-        student.setCourses(courses.getCourses());
+        student.setCourses(courses.getCourseList());
         return student;
     }
 

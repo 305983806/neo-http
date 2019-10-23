@@ -1,4 +1,4 @@
-package com.neo.http.client.bean;
+package com.neo.http.common.bean;
 
 import com.alibaba.fastjson.JSON;
 

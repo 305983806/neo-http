@@ -24,6 +24,11 @@ public enum SystemError implements Error {
     }
 
     @Override
+    public String getRequestId() {
+        return null;
+    }
+
+    @Override
     public String getCode() {
         return code;
     }

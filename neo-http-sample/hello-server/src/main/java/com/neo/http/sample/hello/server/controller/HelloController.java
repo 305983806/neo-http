@@ -4,27 +4,27 @@ import com.neo.http.sample.hello.api.bean.Course;
 import com.neo.http.sample.hello.api.bean.Courses;
 import com.neo.http.sample.hello.server.common.HelloError;
 import com.neo.http.sample.hello.server.common.HelloException;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @Author: cp.Chen
  * @since:
  * @date: 2019-10-18 15:14
  */
-@RestController()
+@RestController
 public class HelloController {
 
-    @PostMapping("/course")
+    @GetMapping("/course")
     public Courses getCourse(@RequestParam String name) {
         if ("王五".equals(name)) {
             throw new HelloException(HelloError.HELLO_NOT_REGISTER);
         }
-        Set<Course> courses = new LinkedHashSet<>();
+        List<Course> courses = new LinkedList<>();
         courses.add(new Course(1, "语文"));
         courses.add(new Course(2, "数学"));
         courses.add(new Course(3, "英语"));

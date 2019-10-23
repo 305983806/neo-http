@@ -1,6 +1,6 @@
 package com.neo.http.client.lang;
 
-import com.neo.http.client.bean.ClientError;
+import com.neo.http.common.bean.Error;
 import com.neo.http.common.lang.NeoHttpException;
 
 /**
@@ -10,15 +10,15 @@ import com.neo.http.common.lang.NeoHttpException;
  */
 public class HttpClientException extends NeoHttpException {
 
-    private ClientError clientError;
+    private Error error;
 
     public HttpClientException() {
         super();
     }
 
-    public HttpClientException(ClientError clientError) {
-        super(clientError.getMessage());
-        this.clientError = clientError;
+    public HttpClientException(Error error) {
+        super(error.getMessage());
+        this.error = error;
     }
 
     public HttpClientException(String message) {
@@ -37,7 +37,7 @@ public class HttpClientException extends NeoHttpException {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 
-    public ClientError getClientError() {
-        return clientError;
+    public Error getError() {
+        return error;
     }
 }

@@ -2,6 +2,7 @@ package com.neo.http.sample.hello.client.bean;
 
 import com.neo.http.sample.hello.api.bean.Course;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -19,7 +20,7 @@ public class Student {
 
     private int age;
 
-    private Set<Course> courses;
+    private List<Course> courses;
 
     public Student() {}
 
@@ -62,11 +63,11 @@ public class Student {
         this.age = age;
     }
 
-    public Set<Course> getCourses() {
+    public List<Course> getCourses() {
         return courses;
     }
 
-    public void setCourses(Set<Course> courses) {
+    public void setCourses(List<Course> courses) {
         this.courses = courses;
     }
 }

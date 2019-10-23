@@ -3,7 +3,7 @@ package com.neo.http.sample.hello.server.common;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.neo.http.server.Constants;
-import com.neo.http.common.bean.HttpServerError;
+import com.neo.http.common.bean.HttpError;
 import com.neo.http.server.utils.ThreadMDCUtil;
 import com.neo.http.server.HttpResponse;
 import com.neo.http.server.filter.wrapper.ResponseWrapper;
@@ -21,7 +21,6 @@ import java.io.IOException;
  * @since:
  * @date: 2019-10-15 10:35
  */
-@WebFilter(filterName = "logFilter", urlPatterns = "/*")
 public class LogFilter implements Filter {
     private static final Logger logger = LoggerFactory.getLogger(LogFilter.class);
 
@@ -48,9 +47,9 @@ public class LogFilter implements Filter {
             String str = new String(content, "UTF-8");
             ServletOutputStream out = response.getOutputStream();
 
-            HttpServerError error = null;
+            HttpError error = null;
             try {
-                error = JSON.parseObject(str, HttpServerError.class);
+                error = JSON.parseObject(str, HttpError.class);
                 if (error.getCode() != null) {
                     buildResponse(error);
                 }
@@ -65,7 +64,7 @@ public class LogFilter implements Filter {
         }
     }
 
-    private String buildResponse(HttpServerError error) {
+    private String buildResponse(HttpError error) {
         HttpResponse response = new HttpResponse();
         response.setRequestId(ThreadMDCUtil.getRequestId());
         response.setCode(error.getCode());

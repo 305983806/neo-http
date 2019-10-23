@@ -21,6 +21,6 @@ public class HelloServiceImpl implements HelloService {
     public Courses getCourse(String name) {
         String url = httpService.getEndpoint() + "/course?name=" + name;
         String res = httpService.get(url);
-        return Courses.fromJSon(res);
+        return Courses.fromJson(res);
     }
 }

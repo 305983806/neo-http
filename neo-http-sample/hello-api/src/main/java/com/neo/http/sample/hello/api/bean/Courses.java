@@ -2,6 +2,8 @@ package com.neo.http.sample.hello.api.bean;
 
 import com.alibaba.fastjson.JSON;
 
+import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -9,15 +11,17 @@ import java.util.Set;
  * @since:
  * @date: 2019-10-18 16:08
  */
-public class Courses {
+public class Courses implements Serializable {
 
-    private Set<Course> courses;
+    private List<Course> courseList;
 
-    public Courses(Set<Course> courses) {
-        this.courses = courses;
+    public Courses() {}
+
+    public Courses(List<Course> courseList) {
+        this.courseList = courseList;
     }
 
-    public static Courses fromJSon(String json) {
+    public static Courses fromJson(String json) {
         return JSON.parseObject(json, Courses.class);
     }
 
@@ -25,7 +29,11 @@ public class Courses {
         return JSON.toJSONString(this);
     }
 
-    public Set<Course> getCourses() {
-        return courses;
+    public void setCourseList(List<Course> courseList) {
+        this.courseList = courseList;
+    }
+
+    public List<Course> getCourseList() {
+        return courseList;
     }
 }

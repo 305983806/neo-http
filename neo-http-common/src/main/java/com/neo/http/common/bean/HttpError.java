@@ -9,19 +9,26 @@ import java.io.Serializable;
  * @since:
  * @date: 2019-10-12 10:22
  */
-public class HttpServerError implements Error, Serializable {
+public class HttpError implements Error, Serializable {
+    private String requestId;
     private String code;
     private String message;
 
-    public HttpServerError() {}
+    public HttpError() {}
 
-    public HttpServerError(String code, String message) {
+    public HttpError(String code, String message) {
         this.code = code;
         this.message = message;
     }
 
-    public static HttpServerError fromJson(String json) {
-        return JSON.parseObject(json, HttpServerError.class);
+    public HttpError(String requestId, String code, String message) {
+        this.requestId = requestId;
+        this.code = code;
+        this.message = message;
+    }
+
+    public static HttpError fromJson(String json) {
+        return JSON.parseObject(json, HttpError.class);
     }
 
     public String toJson() {
@@ -44,5 +51,14 @@ public class HttpServerError implements Error, Serializable {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    @Override
+    public String getRequestId() {
+        return requestId;
+    }
+
+    public void setRequestId(String requestId) {
+        this.requestId = requestId;
     }
 }

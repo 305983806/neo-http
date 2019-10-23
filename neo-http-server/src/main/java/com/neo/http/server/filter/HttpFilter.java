@@ -2,7 +2,7 @@ package com.neo.http.server.filter;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
-import com.neo.http.common.bean.HttpServerError;
+import com.neo.http.common.bean.HttpError;
 import com.neo.http.common.bean.SystemError;
 import com.neo.http.server.Constants;
 import com.neo.http.server.HttpResponse;
@@ -56,7 +56,7 @@ public class HttpFilter implements Filter {
         Object result = null;
 
         try {
-            HttpServerError error = HttpServerError.fromJson(body);
+            HttpError error = HttpError.fromJson(body);
             if (error.getCode() == null) {
                 code = SystemError.SYS_OK.getCode();
                 message = SystemError.SYS_OK.getMessage();

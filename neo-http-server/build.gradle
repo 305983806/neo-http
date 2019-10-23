@@ -1,5 +1,5 @@
 dependencies {
-    implementation "org.springframework.boot:spring-boot-starter-web:${SPRINGBOOT}"
+    compile "org.springframework.boot:spring-boot-starter-web:${SPRINGBOOT}"
 
     compile project(":neo-http-common")
 }

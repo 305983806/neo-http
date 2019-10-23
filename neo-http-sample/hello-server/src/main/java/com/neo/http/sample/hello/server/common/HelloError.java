@@ -20,6 +20,11 @@ public enum HelloError implements Error {
         this.message = message;
     }
 
+    @Override
+    public String getRequestId() {
+        return null;
+    }
+
     public String getCode() {
         return code;
     }

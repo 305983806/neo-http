@@ -7,6 +7,8 @@ package com.neo.http.common.bean;
  */
 public interface Error {
 
+    String getRequestId();
+
     String getCode();
 
     String getMessage();
