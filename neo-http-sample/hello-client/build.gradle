@@ -1,6 +1,5 @@
 dependencies {
     compile ("org.springframework.boot:spring-boot-starter-web:${SPRINGBOOT}")
 
-    implementation project(":neo-http-client")
     implementation project(":neo-http-sample:hello-api")
 }
