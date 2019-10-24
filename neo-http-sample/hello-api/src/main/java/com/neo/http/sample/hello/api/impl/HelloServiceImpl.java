@@ -2,6 +2,7 @@ package com.neo.http.sample.hello.api.impl;
 
 import com.neo.http.client.httpservice.HttpService;
 import com.neo.http.sample.hello.api.HelloService;
+import com.neo.http.sample.hello.api.bean.Course;
 import com.neo.http.sample.hello.api.bean.Courses;
 
 /**
@@ -18,9 +19,28 @@ public class HelloServiceImpl implements HelloService {
     }
 
     @Override
-    public Courses getCourse(String name) {
-        String url = httpService.getEndpoint() + "/course?name=" + name;
+    public Courses getCourses(String name) {
+        String url = httpService.getEndpoint() + "/courses?name=" + name;
         String res = httpService.get(url);
         return Courses.fromJson(res);
     }
+
+    @Override
+    public void createCourses(Courses courses) {
+        String url = httpService.getEndpoint() + "/courses";
+        httpService.post(url, courses.toJson());
+    }
+
+    @Override
+    public void updateCourse(Course course) {
+        String url = httpService.getEndpoint() + "/course";
+        httpService.put(url, course.toJson());
+    }
+
+    @Override
+    public void deleteCourse(int id) {
+        String url = httpService.getEndpoint() + "/course?id=" + id;
+        httpService.delete(url);
+    }
+
 }

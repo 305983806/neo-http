@@ -10,6 +10,8 @@ import com.neo.http.server.filter.wrapper.ResponseWrapper;
 import com.neo.http.server.utils.ThreadMDCUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -68,6 +70,13 @@ public class HttpFilter implements Filter {
         } catch (JSONException e) {
             // 非 JSON 结构
             return body;
+        } catch (NullPointerException e) {
+            if (StringUtils.isEmpty(body) && response.getStatus() == HttpStatus.OK.value()) {
+                code = SystemError.SYS_OK.getCode();
+                message = SystemError.SYS_OK.getMessage();
+            } else {
+                return body;
+            }
         }
 
         HttpResponse newResp = new HttpResponse();

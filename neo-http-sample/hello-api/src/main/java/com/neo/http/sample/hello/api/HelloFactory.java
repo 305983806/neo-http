@@ -1,7 +1,8 @@
-package com.neo.http.sample.hello.api.impl;
+package com.neo.http.sample.hello.api;
 
 import com.neo.http.client.httpservice.JoddHttpService;
 import com.neo.http.sample.hello.api.HelloService;
+import com.neo.http.sample.hello.api.impl.HelloServiceImpl;
 
 /**
  * @Author: cp.Chen

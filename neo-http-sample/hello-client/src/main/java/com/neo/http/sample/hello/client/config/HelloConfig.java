@@ -1,6 +1,6 @@
 package com.neo.http.sample.hello.client.config;
 
-import com.neo.http.sample.hello.api.impl.HelloFactory;
+import com.neo.http.sample.hello.api.HelloFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

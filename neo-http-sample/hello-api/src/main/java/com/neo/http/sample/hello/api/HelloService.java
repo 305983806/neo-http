@@ -3,8 +3,6 @@ package com.neo.http.sample.hello.api;
 import com.neo.http.sample.hello.api.bean.Course;
 import com.neo.http.sample.hello.api.bean.Courses;
 
-import java.util.Set;
-
 /**
  * @Author: cp.Chen
  * @since:
@@ -12,6 +10,12 @@ import java.util.Set;
  */
 public interface HelloService {
 
-    Courses getCourse(String name);
+    Courses getCourses(String name);
+
+    void createCourses(Courses courses);
+
+    void updateCourse(Course course);
+
+    void deleteCourse(int id);
 
 }

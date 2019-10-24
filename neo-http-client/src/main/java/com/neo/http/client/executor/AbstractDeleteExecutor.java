@@ -1,5 +1,6 @@
 package com.neo.http.client.executor;
 
+import com.neo.http.client.executor.jodd.JoddDeleteExecutor;
 import com.neo.http.client.httpservice.HttpService;
 
 /**
@@ -20,7 +21,7 @@ public abstract class AbstractDeleteExecutor implements Executor<String, String>
     public static Executor<String, String> create(HttpService httpService) {
         switch (httpService.getHttpType()) {
             case JODD_HTTP:
-                return null;
+                return new JoddDeleteExecutor(httpService);
             default:
                 throw new IllegalArgumentException(
                         String.format(

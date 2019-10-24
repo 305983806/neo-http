@@ -1,7 +1,7 @@
 package com.neo.http.client.executor.jodd;
 
 import com.alibaba.fastjson.JSONException;
-import com.neo.http.client.executor.AbstractPostExecutor;
+import com.neo.http.client.executor.AbstractPutExecutor;
 import com.neo.http.client.httpservice.HttpService;
 import com.neo.http.client.lang.HttpClientException;
 import com.neo.http.common.bean.HttpError;
@@ -14,26 +14,25 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 
 /**
  * @Author: cp.Chen
  * @since:
- * @date: 2019-10-23 17:44
+ * @date: 2019-10-24 09:30
  */
-public class JoddPostExecutor extends AbstractPostExecutor {
-    private static final Logger logger = LoggerFactory.getLogger(JoddPostExecutor.class);
+public class JoddPutExecutor extends AbstractPutExecutor {
+    private static final Logger logger = LoggerFactory.getLogger(JoddPutExecutor.class);
 
-    public JoddPostExecutor(HttpService httpService) {
+    public JoddPutExecutor(HttpService httpService) {
         super(httpService);
     }
 
     @Override
-    public String execute(String uri, String postEntity) {
-        HttpRequest request = HttpRequest.post(uri);
+    public String execute(String uri, String putEntity) {
+        HttpRequest request = HttpRequest.put(uri);
         request.timeout(super.httpService.getTimeout());
-        if (postEntity != null) {
-            request.bodyText(postEntity);
+        if (putEntity != null) {
+            request.bodyText(putEntity);
         }
         request.contentType(super.httpService.getMeta().getContentType(), StringPool.UTF_8);
         this.setHeader(request);
@@ -56,7 +55,7 @@ public class JoddPostExecutor extends AbstractPostExecutor {
                     ));
                 }
                 if (logger.isDebugEnabled()) {
-                    logger.debug("\n[requestId]: {}\n[url]: {}\n[params]: {}\n[result]: {}", resp.getRequestId(), uri, postEntity, resp.getResult());
+                    logger.debug("\n[requestId]: {}\n[url]: {}\n[params]: {}\n[result]: {}", resp.getRequestId(), uri, putEntity, resp.getResult());
                 }
                 return resp.getResult();
             } catch (JSONException e) {
@@ -70,7 +69,7 @@ public class JoddPostExecutor extends AbstractPostExecutor {
         Iterator it = map.entrySet().iterator();
 
         while (it.hasNext()) {
-            Entry<String, String> entry = (Entry<String, String>) it.next();
+            Map.Entry<String, String> entry = (Map.Entry<String, String>) it.next();
             request.header(entry.getKey(), entry.getValue());
         }
     }

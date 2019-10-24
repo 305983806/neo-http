@@ -1,16 +1,16 @@
 package com.neo.http.sample.hello.client.controller;
 
+import com.neo.http.common.bean.Response;
+import com.neo.http.common.lang.NeoHttpException;
+import com.neo.http.sample.hello.api.bean.Course;
 import com.neo.http.sample.hello.api.bean.Courses;
-import com.neo.http.sample.hello.api.impl.HelloFactory;
+import com.neo.http.sample.hello.api.HelloFactory;
 import com.neo.http.sample.hello.client.bean.Student;
+import com.neo.http.sample.hello.client.common.HelloException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @Author: cp.Chen
@@ -33,9 +33,9 @@ public class HelloController {
         students.add(new Student(5, "陈七", "男", 20));
     }
 
-    @GetMapping("/student/{name}")
+    @GetMapping("/student")
     public Student getStudent(@PathVariable("name") String name) {
-        Student student = new Student();
+        Student student = null;
 
         Iterator<Student> i = students.iterator();
         while (i.hasNext()) {
@@ -45,11 +45,71 @@ public class HelloController {
                 break;
             }
         }
+        if (student != null) {
+            Courses courses = factory.getHelloService().getCourses(name);
+            student.setCourses(courses.getCourseList());
+            return student;
+        } else {
+            throw new RuntimeException("该未有学生注册。");
+        }
+    }
 
-        // 获得课程列表
-        Courses courses = factory.getHelloService().getCourse(name);
-        student.setCourses(courses.getCourseList());
-        return student;
+    @PostMapping("/student")
+    public Response createStudent(@RequestBody Student student) {
+        Courses courses = new Courses();
+        courses.setCourseList(student.getCourses());
+        factory.getHelloService().createCourses(courses);
+        Response resp = new Response();
+        resp.setCode("0");
+        resp.setMessage("OK");
+        return resp;
+    }
+
+    @PutMapping("/student")
+    public Response updateStudent(@RequestBody Student student) {
+        List<Course> courseList = student.getCourses();
+        for (Course c : courseList) {
+            factory.getHelloService().updateCourse(c);
+        }
+        Response resp = new Response();
+        resp.setCode("0");
+        resp.setMessage("OK");
+        return resp;
+    }
+
+    @DeleteMapping("/student/{id}")
+    public Response deleteStudent(@PathVariable(name = "id") int id) {
+        Student student = null;
+        Iterator<Student> i = students.iterator();
+        while (i.hasNext()) {
+            Student s = i.next();
+            if (id == s.getNumber()) {
+                student = s;
+                break;
+            }
+        }
+
+        if (student != null) {
+
+            Course course = new Course(1, "语文");
+            List<Course> courses = new ArrayList<>();
+            courses.add(course);
+            student.setCourses(courses);
+
+            for (Course c : student.getCourses()) {
+                try {
+                    factory.getHelloService().deleteCourse(c.getId());
+                } catch (NeoHttpException e) {
+                    throw new HelloException(e.getMessage());
+                }
+            }
+            Response resp = new Response();
+            resp.setCode("0");
+            resp.setMessage("OK");
+            return resp;
+        } else {
+            throw new RuntimeException("该未有学生注册。");
+        }
     }
 
 }

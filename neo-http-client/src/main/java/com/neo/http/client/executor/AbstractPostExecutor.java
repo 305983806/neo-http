@@ -1,5 +1,6 @@
 package com.neo.http.client.executor;
 
+import com.neo.http.client.executor.jodd.JoddPostExecutor;
 import com.neo.http.client.httpservice.HttpService;
 
 /**
@@ -20,7 +21,7 @@ public abstract class AbstractPostExecutor implements Executor<String, String> {
     public static Executor<String, String> create(HttpService httpService) {
         switch (httpService.getHttpType()) {
             case JODD_HTTP:
-                return null;
+                return new JoddPostExecutor(httpService);
             default:
                 throw new IllegalArgumentException(
                         String.format(

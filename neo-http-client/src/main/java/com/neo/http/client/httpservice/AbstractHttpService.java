@@ -58,7 +58,7 @@ public abstract class AbstractHttpService implements HttpService {
     public String put(String url, String putData) {
         meta = new HttpMeta();
         meta.setContentType(ContentType.APPLICATION_JSON);
-        return this.post(url, putData, meta);
+        return this.put(url, putData, meta);
     }
 
     @Override
@@ -68,9 +68,13 @@ public abstract class AbstractHttpService implements HttpService {
     }
 
     @Override
+    public String delete(String url) {
+        return this.delete(url, null);
+    }
+
+    @Override
     public String delete(String url, String deleteData) {
         meta = new HttpMeta();
-        meta.setContentType(ContentType.APPLICATION_JSON);
         return this.delete(url, deleteData, meta);
     }
 
@@ -115,7 +119,7 @@ public abstract class AbstractHttpService implements HttpService {
             return result;
         } catch (HttpClientException e) {
             Error error = e.getError();
-            logger.error(String.format("\n[requestId]: %s\n[url]: %s\n[params]: %s\n[errmsg]: %s", error.getRequestId(), uri, data, e.getMessage()), e);
+            logger.error("\n[requestId]: {}\n[url]: {}\n[params]: {}\n[errmsg]: {}", error.getRequestId(), uri, data, e.getMessage());
             throw e;
         } catch (HttpException e) {
             //TODO 日志输出
@@ -146,7 +150,7 @@ public abstract class AbstractHttpService implements HttpService {
 
     @Override
     public HttpMeta getMeta() {
-        return null;
+        return this.meta;
     }
 
 

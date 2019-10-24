@@ -65,7 +65,14 @@ public interface HttpService {
     String put(String url, String putData, HttpMeta meta);
 
     /**
-     * 针对所有API中的 DELETE 请求，默认支持 content-type:application/json
+     * 针对所有API中的 DELETE 请求
+     * @param url
+     * @return
+     */
+    String delete(String url);
+
+    /**
+     * 针对所有API中的 DELETE 请求
      * @param url
      * @param deleteData
      * @return
