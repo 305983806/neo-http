@@ -4,6 +4,7 @@ import com.neo.http.server.filter.SignatureHttpFilter;
 import com.neo.http.server.utils.ThreadMDCUtil;
 import org.slf4j.MDC;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.concurrent.Callable;
@@ -15,6 +16,7 @@ import java.util.concurrent.Future;
  * @since:
  * @date: 2019-10-21 11:28
  */
+@Configuration
 public class SignatureHttpConfiguration {
 
     @Bean
@@ -38,7 +40,7 @@ public class SignatureHttpConfiguration {
 
     @Bean
     public SignatureHttpFilter signatureHttpFilter() {
-        return new SignatureHttpFilter();
+        return new SignatureHttpFilter("antifake");
     }
 
 }

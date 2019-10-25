@@ -12,11 +12,21 @@ import java.util.Map;
  */
 public class HttpMeta {
 
-    String contentType;
+    private int timeout;
+
+    private String contentType;
 
     Map<String, String> headers = new HashMap<>();
 
-    Map<String, String> queryParams = new HashMap<>();
+    public HttpMeta() {
+        this.timeout = 10000;
+        this.contentType = ContentType.TEXT_XML;
+    }
+
+    public HttpMeta(String contentType) {
+        super();
+        this.contentType = contentType;
+    }
 
     public String getContentType() {
         return contentType;
@@ -34,11 +44,11 @@ public class HttpMeta {
         this.headers = headers;
     }
 
-    public Map<String, String> getQueryParams() {
-        return queryParams;
+    public int getTimeout() {
+        return timeout;
     }
 
-    public void setQueryParams(Map<String, String> queryParams) {
-        this.queryParams = queryParams;
+    public void setTimeout(int timeout) {
+        this.timeout = timeout;
     }
 }

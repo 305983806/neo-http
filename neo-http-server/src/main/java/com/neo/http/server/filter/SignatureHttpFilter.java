@@ -12,6 +12,7 @@ import org.apache.tomcat.util.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -45,7 +46,7 @@ public class SignatureHttpFilter extends HttpFilter {
     private final String AUTHORIZATION = "Authorization";
 
     // HEADER常量 x-{appName}-date
-    private String DATE = "x-" + appName.toLowerCase() + "-date";
+    private String DATE;
 
     private String accessKeyId;
 
@@ -56,6 +57,11 @@ public class SignatureHttpFilter extends HttpFilter {
     private SignatureDao signatureDao;
 
     public SignatureHttpFilter() {}
+
+    public SignatureHttpFilter(String appName) {
+        this.appName = appName.toUpperCase();
+        this.DATE = "x-" + appName.toLowerCase() + "-date";
+    }
 
     public SignatureHttpFilter(SignatureDao signatureDao) {
         if (signatureDao == null) {
@@ -128,6 +134,7 @@ public class SignatureHttpFilter extends HttpFilter {
     private void getAuthorization(HttpServletRequest req) {
         String authzStr = req.getHeader(AUTHORIZATION);
         Matcher matcher = Pattern.compile("\\s").matcher(authzStr.trim());
+        matcher.find();
         String[] signs = authzStr.substring(matcher.start() + 1).split(":");
         accessKeyId = signs[0];
         inputSignature = signs[1];
@@ -174,12 +181,18 @@ public class SignatureHttpFilter extends HttpFilter {
 
         // CONTENT-MD5
         String body = getBodyString(req);
-        String contentMD5 = Md5Crypt.md5Crypt(body.getBytes());
-        sb.append(contentMD5 + "\n");
+        if (!StringUtils.isEmpty(body)) {
+            String contentMD5 = Md5Crypt.md5Crypt(body.getBytes());
+            sb.append(contentMD5 + "\n");
+        }
 
         // CONTENT-TYPE
         String contentType = req.getContentType();
         sb.append(contentType + "\n");
+
+        // DATE
+        String date = req.getHeader(DATE);
+        sb.append(date + "\n");
 
         // CanonicalizedResource
         String uri = req.getRequestURI();
