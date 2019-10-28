@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -31,21 +30,14 @@ public abstract class AbstractExecutor implements Executor<String, String> {
 
     private int maxRetryTimes = 2;
 
-    private String appName;
-
     private String xDate;
 
-    private String accessKeyId;
-
-    private String accessKeySecret;
-
-    protected boolean isSignature = false;
-
-    public AbstractExecutor() {}
-
-    public AbstractExecutor(String appName) {
-        this.appName = appName;
-        xDate = "x-" + appName.toLowerCase() + "-date";
+    public AbstractExecutor() {
+        if (!StringUtil.isEmpty(meta.getAppName())) {
+            xDate = "x-" + meta.getAppName().toLowerCase() + "-date";
+        } else {
+            xDate = "x-date";
+        }
     }
 
     @Override
@@ -87,7 +79,7 @@ public abstract class AbstractExecutor implements Executor<String, String> {
     }
 
     protected void signature(HttpRequest request) {
-        StringBuilder builder = new StringBuilder(appName.toUpperCase() + "\\s" + accessKeyId + ":");
+        StringBuilder builder = new StringBuilder(meta.getAppName().toUpperCase() + "\\s" + meta.getAccessKeyId() + ":");
         //HTTP_METHOD
         String httpMethod = request.method();
         builder.append(httpMethod + "\n");
@@ -109,7 +101,7 @@ public abstract class AbstractExecutor implements Executor<String, String> {
         //CanonicalizedResource
         builder.append(request.url());
 
-        byte[] hmacBytes = HMACSHA1.hmacSHA1Encrypt(accessKeySecret, builder.toString());
+        byte[] hmacBytes = HMACSHA1.hmacSHA1Encrypt(meta.getAccessKeySecret(), builder.toString());
 
         request.header("Authorization", Base64.encodeBase64URLSafeString(hmacBytes));
         request.header(xDate, gmt);

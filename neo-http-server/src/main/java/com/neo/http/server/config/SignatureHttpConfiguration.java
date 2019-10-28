@@ -16,7 +16,7 @@ import java.util.concurrent.Future;
  * @since:
  * @date: 2019-10-21 11:28
  */
-@Configuration
+//@Configuration
 public class SignatureHttpConfiguration {
 
     @Bean

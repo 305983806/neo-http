@@ -28,7 +28,7 @@ public class JoddGet extends AbstractExecutor {
         }
 
         HttpRequest req = HttpRequest.get(uri);
-        if (super.isSignature) {
+        if (super.meta.isSignature()) {
             super.signature(req);
         }
         HttpResponse resp = req

@@ -2,9 +2,9 @@ package com.neo.http.sample.hello.client.controller;
 
 import com.neo.http.common.bean.Response;
 import com.neo.http.common.lang.NeoHttpException;
+import com.neo.http.sample.hello.api.HelloHttpManager;
 import com.neo.http.sample.hello.api.bean.Course;
 import com.neo.http.sample.hello.api.bean.Courses;
-import com.neo.http.sample.hello.api.HelloFactory;
 import com.neo.http.sample.hello.client.bean.Student;
 import com.neo.http.sample.hello.client.common.HelloException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ import java.util.*;
 public class HelloController {
 
     @Autowired
-    private HelloFactory factory;
+    private HelloHttpManager helloHttpManager;
 
     private Set<Student> students = new HashSet<>();
 
@@ -34,7 +34,7 @@ public class HelloController {
     }
 
     @GetMapping("/student")
-    public Student getStudent(@PathVariable("name") String name) {
+    public Student getStudent(@RequestParam String name) {
         Student student = null;
 
         Iterator<Student> i = students.iterator();
@@ -46,7 +46,7 @@ public class HelloController {
             }
         }
         if (student != null) {
-            Courses courses = factory.getHelloService().getCourses(name);
+            Courses courses = helloHttpManager.getHelloService().getCourses(name);
             student.setCourses(courses.getCourseList());
             return student;
         } else {
@@ -58,7 +58,7 @@ public class HelloController {
     public Response createStudent(@RequestBody Student student) {
         Courses courses = new Courses();
         courses.setCourseList(student.getCourses());
-        factory.getHelloService().createCourses(courses);
+        helloHttpManager.getHelloService().createCourses(courses);
         Response resp = new Response();
         resp.setCode("0");
         resp.setMessage("OK");
@@ -69,7 +69,7 @@ public class HelloController {
     public Response updateStudent(@RequestBody Student student) {
         List<Course> courseList = student.getCourses();
         for (Course c : courseList) {
-            factory.getHelloService().updateCourse(c);
+            helloHttpManager.getHelloService().updateCourse(c);
         }
         Response resp = new Response();
         resp.setCode("0");
@@ -98,7 +98,7 @@ public class HelloController {
 
             for (Course c : student.getCourses()) {
                 try {
-                    factory.getHelloService().deleteCourse(c.getId());
+                    helloHttpManager.getHelloService().deleteCourse(c.getId());
                 } catch (NeoHttpException e) {
                     throw new HelloException(e.getMessage());
                 }

@@ -15,18 +15,11 @@ import com.neo.http.client.lang.HttpClientException;
  */
 public abstract class AbstractHttpManager implements HttpManager {
 
-    private String endPoint;
-
     private Factory factory;
-
-    private String accessKeyId;
-
-    private String accessKeySecret;
 
     private HttpType type = HttpType.JODD_HTTP;
 
-    // 是否开启签名校验
-    private boolean isSignature = false;
+    private HttpMeta meta;
 
     public AbstractHttpManager() {
         switch (type) {
@@ -38,51 +31,67 @@ public abstract class AbstractHttpManager implements HttpManager {
                         "The HttpType \"%s\" is not supported. You should chose \"JODD_HTTP\" only when initialization.",
                         type));
         }
+        meta = new HttpMeta();
     }
 
     public AbstractHttpManager(String endPoint) {
         this();
-        this.endPoint = endPoint;
+        meta.setEndPoint(endPoint);
+    }
+
+    public AbstractHttpManager(String appName, String endPoint) {
+        this(endPoint);
+        meta.setAppName(appName);
     }
 
     public AbstractHttpManager(String endPoint, String accessKeyId, String accessKeySecret) {
         this(endPoint);
-        this.accessKeyId = accessKeyId;
-        this.accessKeySecret = accessKeySecret;
-        this.isSignature = true;
+        meta.setAccessKeyId(accessKeyId);
+        meta.setAccessKeySecret(accessKeySecret);
+        meta.setSignature(true);
+    }
+
+    public AbstractHttpManager(String appName, String endPoint, String accessKeyId, String accessKeySecret) {
+        this(endPoint, accessKeyId, accessKeySecret);
+        meta.setAppName(appName);
     }
 
     @Override
     public String get(String url) {
         Executor<String, String> get = factory.createGet();
+        get.setMeta(meta);
         return get.execute(url, null);
     }
 
     @Override
     public String post(String url, String postData) {
         Executor<String, String> post = factory.createPost();
-        post.setMeta(new HttpMeta(ContentType.APPLICATION_JSON));
+        meta.setContentType(ContentType.APPLICATION_JSON);
+        post.setMeta(meta);
         return post.execute(url, postData);
     }
 
     @Override
     public String put(String url, String putData) {
         Executor<String, String> put = factory.createPut();
-        put.setMeta(new HttpMeta(ContentType.APPLICATION_JSON));
+        meta.setContentType(ContentType.APPLICATION_JSON);
+        put.setMeta(meta);
         return put.execute(url, putData);
     }
 
     @Override
     public String delete(String url) {
         Executor<String, String> delete = factory.createDelete();
+        delete.setMeta(meta);
         return delete.execute(url, null);
+    }
+
+    @Override
+    public String getEndPoint() {
+        return this.meta.getEndPoint();
     }
 
     protected void setType(HttpType type) {
         this.type = type;
-    }
-
-    protected void setSignature(boolean signature) {
-        isSignature = signature;
     }
 }

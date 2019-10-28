@@ -12,20 +12,46 @@ import java.util.Map;
  */
 public class HttpMeta {
 
-    private int timeout;
+    private String appName;
 
-    private String contentType;
-
+    private String endPoint;
+    private int timeout = 10000;
+    private String contentType = ContentType.TEXT_XML;
     Map<String, String> headers = new HashMap<>();
 
-    public HttpMeta() {
-        this.timeout = 10000;
-        this.contentType = ContentType.TEXT_XML;
-    }
+    private boolean isSignature;
+    private String accessKeyId;
+    private String accessKeySecret;
+
+    public HttpMeta() {}
 
     public HttpMeta(String contentType) {
         super();
         this.contentType = contentType;
+    }
+
+    public String getAppName() {
+        return appName;
+    }
+
+    public void setAppName(String appName) {
+        this.appName = appName;
+    }
+
+    public String getEndPoint() {
+        return endPoint;
+    }
+
+    public void setEndPoint(String endPoint) {
+        this.endPoint = endPoint;
+    }
+
+    public int getTimeout() {
+        return timeout;
+    }
+
+    public void setTimeout(int timeout) {
+        this.timeout = timeout;
     }
 
     public String getContentType() {
@@ -44,11 +70,27 @@ public class HttpMeta {
         this.headers = headers;
     }
 
-    public int getTimeout() {
-        return timeout;
+    public boolean isSignature() {
+        return isSignature;
     }
 
-    public void setTimeout(int timeout) {
-        this.timeout = timeout;
+    public void setSignature(boolean signature) {
+        isSignature = signature;
+    }
+
+    public String getAccessKeyId() {
+        return accessKeyId;
+    }
+
+    public void setAccessKeyId(String accessKeyId) {
+        this.accessKeyId = accessKeyId;
+    }
+
+    public String getAccessKeySecret() {
+        return accessKeySecret;
+    }
+
+    public void setAccessKeySecret(String accessKeySecret) {
+        this.accessKeySecret = accessKeySecret;
     }
 }

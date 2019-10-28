@@ -28,7 +28,7 @@ public class JoddDelete extends AbstractExecutor {
         }
 
         HttpRequest request = HttpRequest.delete(uri);
-        if (super.isSignature) {
+        if (super.meta.isSignature()) {
             // 签名
             super.signature(request);
         }

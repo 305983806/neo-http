@@ -29,7 +29,7 @@ public class JoddPut extends AbstractExecutor {
         }
         request.contentType(super.meta.getContentType(), StringPool.UTF_8);
         super.setHeader(request);
-        if (super.isSignature) {
+        if (super.meta.isSignature()) {
             // 签名
             super.signature(request);
         }

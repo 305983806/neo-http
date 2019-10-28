@@ -17,4 +17,6 @@ public interface HttpManager {
 
     String delete(String url);
 
+    String getEndPoint();
+
 }

@@ -1,7 +1,6 @@
 package com.neo.http.client.executor.jodd;
 
 import com.alibaba.fastjson.JSONException;
-import com.neo.http.client.bean.ContentType;
 import com.neo.http.client.executor.factory.AbstractExecutor;
 import com.neo.http.client.lang.HttpClientException;
 import com.neo.http.common.bean.HttpError;
@@ -11,10 +10,6 @@ import jodd.http.HttpResponse;
 import jodd.util.StringPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 /**
  * @Author: cp.Chen
@@ -33,7 +28,7 @@ public class JoddPost extends AbstractExecutor {
         }
         request.contentType(super.meta.getContentType(), StringPool.UTF_8);
         super.setHeader(request);
-        if (super.isSignature) {
+        if (super.meta.isSignature()) {
             // 签名
             super.signature(request);
         }

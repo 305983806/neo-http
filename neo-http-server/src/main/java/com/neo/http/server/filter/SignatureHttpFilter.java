@@ -198,7 +198,8 @@ public class SignatureHttpFilter extends HttpFilter {
         String uri = req.getRequestURI();
         sb.append(uri);
 
-        this.accessKeySecret = signatureDao.getAccessKeySecret(accessKeyId);
+//        this.accessKeySecret = signatureDao.getAccessKeySecret(accessKeyId);
+        this.accessKeySecret = "ib0PmiNVFi4VBYAwlYxLyA";
         byte[] hmacBytes = HMACSHA1.hmacSHA1Encrypt(accessKeySecret, sb.toString());
 
         return Base64.encodeBase64URLSafeString(hmacBytes);
