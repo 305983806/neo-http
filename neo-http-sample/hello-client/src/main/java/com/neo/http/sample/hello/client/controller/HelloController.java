@@ -50,7 +50,7 @@ public class HelloController {
             student.setCourses(courses.getCourseList());
             return student;
         } else {
-            throw new RuntimeException("该未有学生注册。");
+            throw new RuntimeException("该学生未注册。");
         }
     }
 

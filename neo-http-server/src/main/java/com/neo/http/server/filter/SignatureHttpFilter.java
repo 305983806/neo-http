@@ -56,8 +56,6 @@ public class SignatureHttpFilter extends HttpFilter {
 
     private SignatureDao signatureDao;
 
-    public SignatureHttpFilter() {}
-
     public SignatureHttpFilter(String appName) {
         this.appName = appName.toUpperCase();
         this.DATE = "x-" + appName.toLowerCase() + "-date";

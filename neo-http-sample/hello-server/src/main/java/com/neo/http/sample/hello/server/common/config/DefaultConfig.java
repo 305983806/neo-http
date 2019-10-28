@@ -1,7 +1,5 @@
 package com.neo.http.sample.hello.server.common.config;
 
-import com.neo.http.server.config.SimpleHttpConfiguration;
-import com.neo.http.server.filter.HttpFilter;
 import com.neo.http.server.filter.SignatureHttpFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,13 +13,8 @@ import org.springframework.context.annotation.Configuration;
 public class DefaultConfig {
 
     @Bean
-    public SimpleHttpConfiguration simpleHttpConfiguration() {
-        return new SimpleHttpConfiguration();
-    }
-
-    @Bean
     public SignatureHttpFilter signatureHttpFilter() {
-        return new SignatureHttpFilter();
+        return new SignatureHttpFilter("hello");
     }
 
 }
