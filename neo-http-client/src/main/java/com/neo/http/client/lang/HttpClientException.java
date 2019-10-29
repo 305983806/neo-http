@@ -10,15 +10,14 @@ import com.neo.http.common.lang.NeoHttpException;
  */
 public class HttpClientException extends NeoHttpException {
 
-    private Error error;
+//    private Error error;
 
     public HttpClientException() {
         super();
     }
 
     public HttpClientException(Error error) {
-        super(error.getMessage());
-        this.error = error;
+        super(error);
     }
 
     public HttpClientException(String message) {
@@ -37,7 +36,7 @@ public class HttpClientException extends NeoHttpException {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 
-    public Error getError() {
-        return error;
-    }
+//    public Error getError() {
+//        return error;
+//    }
 }

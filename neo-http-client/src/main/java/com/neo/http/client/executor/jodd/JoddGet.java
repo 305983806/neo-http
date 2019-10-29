@@ -7,6 +7,7 @@ import com.neo.http.common.bean.HttpError;
 import com.neo.http.common.bean.Response;
 import jodd.http.HttpRequest;
 import jodd.http.HttpResponse;
+import jodd.http.HttpStatus;
 import jodd.util.StringPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,14 +29,15 @@ public class JoddGet extends AbstractExecutor {
         }
 
         HttpRequest req = HttpRequest.get(uri);
+        req.timeout(super.meta.getTimeout());
+        req.contentType(meta.getContentType());
         if (super.meta.isSignature()) {
             super.signature(req);
         }
-        HttpResponse resp = req
-                .timeout(super.meta.getTimeout())
-                .send();
+        HttpResponse resp = req.send();
         resp.charset(StringPool.UTF_8);
         String respBody = resp.bodyText();
+
         try {
             Response response = Response.fromJson(respBody);
             if (response.getCode() != null && !"0".equals(response.getCode())) {

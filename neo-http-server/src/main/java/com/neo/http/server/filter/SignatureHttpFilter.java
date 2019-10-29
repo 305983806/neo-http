@@ -1,6 +1,9 @@
 package com.neo.http.server.filter;
 
+import com.neo.http.common.bean.HttpError;
+import com.neo.http.common.bean.SystemError;
 import com.neo.http.common.utils.HMACSHA1;
+import com.neo.http.common.utils.MD5Utils;
 import com.neo.http.common.utils.TimeUtil;
 import com.neo.http.server.Constants;
 import com.neo.http.server.filter.wrapper.RequestWrapper;
@@ -24,6 +27,8 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -180,7 +185,7 @@ public class SignatureHttpFilter extends HttpFilter {
         // CONTENT-MD5
         String body = getBodyString(req);
         if (!StringUtils.isEmpty(body)) {
-            String contentMD5 = Md5Crypt.md5Crypt(body.getBytes());
+            String contentMD5 = Base64.encodeBase64URLSafeString(MD5Utils.digest(body));
             sb.append(contentMD5 + "\n");
         }
 
@@ -194,6 +199,16 @@ public class SignatureHttpFilter extends HttpFilter {
 
         // CanonicalizedResource
         String uri = req.getRequestURI();
+        Map<String, String[]> paramMap = req.getParameterMap() == null ? new HashMap(): (Map<String, String[]>) req.getParameterMap();
+        if (paramMap.size() > 0 && uri.indexOf('?') == -1) {
+            uri += '?';
+            for (Map.Entry<String, String[]> entry : paramMap.entrySet()) {
+                uri += uri.endsWith("?") ?
+                        entry.getKey() + "=" + entry.getValue()[0] :
+                        '&' + entry.getKey() + "=" + entry.getValue()[0];
+            }
+
+        }
         sb.append(uri);
 
 //        this.accessKeySecret = signatureDao.getAccessKeySecret(accessKeyId);
@@ -203,41 +218,58 @@ public class SignatureHttpFilter extends HttpFilter {
         return Base64.encodeBase64URLSafeString(hmacBytes);
     }
 
+    private void doOutput(ServletResponse response, String body) throws IOException {
+        response.setContentLengthLong(body.getBytes().length);
+        ServletOutputStream out = response.getOutputStream();
+        out.write(body.getBytes());
+        out.flush();
+        out.close();
+    }
+
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = new RequestWrapper((HttpServletRequest) request);
         ResponseWrapper resp = new ResponseWrapper((HttpServletResponse) response);
 
+        // RequestId
+        if (request instanceof HttpServletRequest) {
+            ThreadMDCUtil.setRequestIdIfAbsent();
+        }
+
         // 校验 Header 参数合法性
         if (!headerVerify(req)) {
-            resp.sendError(HttpServletResponse.SC_FORBIDDEN, "You dont't have permission to access on this server.");
+            // 签名格式不正确
+            resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            String body = new HttpError(
+                    ThreadMDCUtil.getRequestId(),
+                    SystemError.SYS_INVALID_AUTHORIZATION_HEAD.getCode(),
+                    SystemError.SYS_INVALID_AUTHORIZATION_HEAD.getMessage()
+            ).toJson();
+            doOutput(response, body);
             return;
         }
 
         // 获得客户端传入的签名信息：accesskeyId + signature
         this.getAuthorization(req);
 
-        // RequestId
-        if (request instanceof HttpServletRequest) {
-            ThreadMDCUtil.setRequestIdIfAbsent();
-        }
         resp.setHeader(Constants.HTTP_HEADER_REQUEST_ID, ThreadMDCUtil.getRequestId());
 
         // 签名比对
         String signature = signature(req);
         if (!inputSignature.equals(signature)){
-            resp.sendError(HttpServletResponse.SC_FORBIDDEN, "You dont't have permission to access on this server.");
-            return;
+            // 签名不匹配
+            resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            String body = new HttpError(
+                    ThreadMDCUtil.getRequestId(),
+                    SystemError.SYS_SIGNATURE_DOSENOT_MATCH.getCode(),
+                    SystemError.SYS_SIGNATURE_DOSENOT_MATCH.getMessage()
+            ).toJson();
+            doOutput(response, body);
+        } else {
+            chain.doFilter(req, resp);
+            String body = super.getStandardResponse(resp);
+            doOutput(response, body);
         }
-
-        chain.doFilter(req, resp);
-
-        String body = super.getStandardResponse(resp);
-        resp.setContentLengthLong(body.getBytes().length);
-        ServletOutputStream out = response.getOutputStream();
-        out.write(body.getBytes());
-        out.flush();
-        out.close();
     }
 
     public void setAppName(String appName) {

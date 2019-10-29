@@ -16,6 +16,7 @@ public class NeoHttpException extends RuntimeException {
     }
 
     public NeoHttpException(Error error) {
+        super(error.getMessage());
         this.error = error;
     }
 

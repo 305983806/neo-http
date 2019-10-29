@@ -3,9 +3,11 @@ package com.neo.http.client.executor.factory;
 import com.neo.http.client.bean.HttpMeta;
 import com.neo.http.client.lang.HttpClientException;
 import com.neo.http.common.utils.HMACSHA1;
+import com.neo.http.common.utils.MD5Utils;
 import com.neo.http.common.utils.TimeUtil;
 import jodd.http.HttpException;
 import jodd.http.HttpRequest;
+import jodd.net.URLDecoder;
 import jodd.util.StringUtil;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.Md5Crypt;
@@ -28,17 +30,11 @@ public abstract class AbstractExecutor implements Executor<String, String> {
 
     private int retrySleepMillis = 1000;
 
-    private int maxRetryTimes = 2;
+    private int maxRetryTimes = 0;
 
     private String xDate;
 
-    public AbstractExecutor() {
-        if (!StringUtil.isEmpty(meta.getAppName())) {
-            xDate = "x-" + meta.getAppName().toLowerCase() + "-date";
-        } else {
-            xDate = "x-date";
-        }
-    }
+    public AbstractExecutor() {}
 
     @Override
     public String execute(String uri, String data) {
@@ -79,7 +75,7 @@ public abstract class AbstractExecutor implements Executor<String, String> {
     }
 
     protected void signature(HttpRequest request) {
-        StringBuilder builder = new StringBuilder(meta.getAppName().toUpperCase() + "\\s" + meta.getAccessKeyId() + ":");
+        StringBuilder builder = new StringBuilder();
         //HTTP_METHOD
         String httpMethod = request.method();
         builder.append(httpMethod + "\n");
@@ -87,7 +83,7 @@ public abstract class AbstractExecutor implements Executor<String, String> {
         //CONTENT_MD5
         String body = request.bodyText();
         if (!StringUtil.isEmpty(body)) {
-            String contentMD5 = Md5Crypt.md5Crypt(body.getBytes());
+            String contentMD5 = Base64.encodeBase64URLSafeString(MD5Utils.digest(body));
             builder.append(contentMD5 + "\n");
         }
 
@@ -99,11 +95,25 @@ public abstract class AbstractExecutor implements Executor<String, String> {
         builder.append(gmt + "\n");
 
         //CanonicalizedResource
-        builder.append(request.url());
+        String url = URLDecoder.decode(request.url());
+        String hostUrl = request.hostUrl();
+        String resource = url.substring(hostUrl.length());
+        builder.append(resource);
 
         byte[] hmacBytes = HMACSHA1.hmacSHA1Encrypt(meta.getAccessKeySecret(), builder.toString());
 
-        request.header("Authorization", Base64.encodeBase64URLSafeString(hmacBytes));
+        StringBuilder sb = new StringBuilder();
+        sb.append(meta.getAppName().toUpperCase() + " ");
+        sb.append(meta.getAccessKeyId());
+        sb.append(":");
+        sb.append(Base64.encodeBase64URLSafeString(hmacBytes));
+        request.header("Authorization", sb.toString());
+
+        if (!StringUtil.isEmpty(meta.getAppName())) {
+            xDate = "x-" + meta.getAppName().toLowerCase() + "-date";
+        } else {
+            xDate = "x-date";
+        }
         request.header(xDate, gmt);
     }
 
