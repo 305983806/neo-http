@@ -13,7 +13,7 @@ public enum SystemError implements Error {
     SYS_INVALID_PARAMETER_FORMAT    ("sys.InvalidParameterFormat", "返回值格式不正确（Format 不支持）。返回格式支持 XML 与 JSON，默认为 JSON。"),
     SYS_INVALID_ACCESSKEYID         ("sys.InvalidAccessKeyId", "AccessKeyId 找不到。请检查调用时是否使用了正确的 AccessKey。"),
 
-    SYS_INVALID_AUTHORIZATION_HEAD  ("sys.InvalidAuthorizationHead", "签名格式不正确"),
+    SYS_INVALID_AUTHORIZATION_HEAD  ("sys.InvalidAuthorizationHeader", "签名格式不正确"),
     SYS_SIGNATURE_DOSENOT_MATCH     ("sys.SignatureDoesNotMatch", "签名不匹配。请检查 Access Key ID 和 Access Key Secret 是否正确；检查签名方法是否正确。"),
     ;
 

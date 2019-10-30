@@ -1,6 +1,7 @@
 package com.neo.http.common.bean;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.annotation.JSONField;
 
 import java.io.Serializable;
 
@@ -10,8 +11,13 @@ import java.io.Serializable;
  * @date: 2019-10-12 10:22
  */
 public class HttpError implements Error, Serializable {
+    @JSONField(ordinal = 1)
     private String requestId;
+
+    @JSONField(ordinal = 2)
     private String code;
+
+    @JSONField(ordinal = 3)
     private String message;
 
     public HttpError() {}

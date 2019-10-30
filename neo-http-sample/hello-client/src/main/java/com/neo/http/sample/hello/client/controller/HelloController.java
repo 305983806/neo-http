@@ -1,6 +1,6 @@
 package com.neo.http.sample.hello.client.controller;
 
-import com.neo.http.common.bean.Response;
+import com.neo.http.common.bean.HttpResponse;
 import com.neo.http.common.lang.NeoHttpException;
 import com.neo.http.sample.hello.api.HelloHttpManager;
 import com.neo.http.sample.hello.api.bean.Course;
@@ -55,30 +55,30 @@ public class HelloController {
     }
 
     @PostMapping("/student")
-    public Response createStudent(@RequestBody Student student) {
+    public HttpResponse createStudent(@RequestBody Student student) {
         Courses courses = new Courses();
         courses.setCourseList(student.getCourses());
         helloHttpManager.getHelloService().createCourses(courses);
-        Response resp = new Response();
+        HttpResponse resp = new HttpResponse();
         resp.setCode("0");
         resp.setMessage("OK");
         return resp;
     }
 
     @PutMapping("/student")
-    public Response updateStudent(@RequestBody Student student) {
+    public HttpResponse updateStudent(@RequestBody Student student) {
         List<Course> courseList = student.getCourses();
         for (Course c : courseList) {
             helloHttpManager.getHelloService().updateCourse(c);
         }
-        Response resp = new Response();
+        HttpResponse resp = new HttpResponse();
         resp.setCode("0");
         resp.setMessage("OK");
         return resp;
     }
 
     @DeleteMapping("/student/{id}")
-    public Response deleteStudent(@PathVariable(name = "id") int id) {
+    public HttpResponse deleteStudent(@PathVariable(name = "id") int id) {
         Student student = null;
         Iterator<Student> i = students.iterator();
         while (i.hasNext()) {
@@ -103,7 +103,7 @@ public class HelloController {
                     throw new HelloException(e.getMessage());
                 }
             }
-            Response resp = new Response();
+            HttpResponse resp = new HttpResponse();
             resp.setCode("0");
             resp.setMessage("OK");
             return resp;

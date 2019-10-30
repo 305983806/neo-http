@@ -1,13 +1,11 @@
 package com.neo.http.client.executor.jodd;
 
 import com.alibaba.fastjson.JSONException;
-import com.neo.http.client.executor.AbstractGetExecutor;
-import com.neo.http.client.httpservice.HttpService;
+import com.neo.http.client.executor.factory.AbstractExecutor;
 import com.neo.http.client.lang.HttpClientException;
 import com.neo.http.common.bean.HttpError;
-import com.neo.http.common.bean.Response;
+import com.neo.http.common.bean.HttpResponse;
 import jodd.http.HttpRequest;
-import jodd.http.HttpResponse;
 import jodd.util.StringPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,17 +13,13 @@ import org.slf4j.LoggerFactory;
 /**
  * @Author: cp.Chen
  * @since:
- * @date: 2019-10-11 17:13
+ * @date: 2019-10-25 10:35
  */
-public class JoddGetExecutor extends AbstractGetExecutor {
+public class JoddGetExecutor extends AbstractExecutor {
     private static final Logger logger = LoggerFactory.getLogger(JoddGetExecutor.class);
 
-    public JoddGetExecutor(HttpService httpService) {
-        super(httpService);
-    }
-
     @Override
-    public String execute(String uri, String queryParam) {
+    protected String executeInternal(String uri, String queryParam) {
         if (queryParam != null) {
             if (uri.indexOf('?') == -1)
                 uri += '?';
@@ -33,26 +27,33 @@ public class JoddGetExecutor extends AbstractGetExecutor {
         }
 
         HttpRequest req = HttpRequest.get(uri);
-        HttpResponse resp = req
-                .timeout(httpService.getTimeout())
-                .send();
+        req.timeout(super.meta.getTimeout());
+        req.contentType(meta.getContentType());
+        if (super.meta.isSignature()) {
+            super.signature(req);
+        }
+        jodd.http.HttpResponse resp = req.send();
         resp.charset(StringPool.UTF_8);
-
         String respBody = resp.bodyText();
 
         try {
-            Response response = Response.fromJson(respBody);
-            if (response.getCode() != null && !"0".equals(response.getCode())) {
+            HttpResponse httpResponse = HttpResponse.fromJson(respBody);
+            if (httpResponse.getCode() != null && !"0".equals(httpResponse.getCode())) {
                 throw new HttpClientException(new HttpError(
-                        response.getRequestId(),
-                        response.getCode(),
-                        response.getMessage()
+                        httpResponse.getRequestId(),
+                        httpResponse.getCode(),
+                        httpResponse.getMessage()
                 ));
             }
             if (logger.isDebugEnabled()) {
-                logger.debug("\n[requestId]: {}\n[url]: {}\n[params]: {}\n[result]: {}", response.getRequestId(), uri, queryParam, response.getResult());
+                logger.debug(
+                        "\n[requestId]: {}\n[url]: {}\n[params]: {}\n[result]: {}",
+                        httpResponse.getRequestId(),
+                        uri,
+                        queryParam,
+                        httpResponse.getResult() == null ? httpResponse.getMessage() : httpResponse.getResult());
             }
-            return response.getResult();
+            return httpResponse.getResult();
         } catch (JSONException e) {
             return respBody;
         }

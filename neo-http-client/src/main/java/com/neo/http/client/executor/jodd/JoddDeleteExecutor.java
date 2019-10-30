@@ -1,13 +1,11 @@
 package com.neo.http.client.executor.jodd;
 
 import com.alibaba.fastjson.JSONException;
-import com.neo.http.client.executor.AbstractDeleteExecutor;
-import com.neo.http.client.httpservice.HttpService;
+import com.neo.http.client.executor.factory.AbstractExecutor;
 import com.neo.http.client.lang.HttpClientException;
 import com.neo.http.common.bean.HttpError;
-import com.neo.http.common.bean.Response;
+import com.neo.http.common.bean.HttpResponse;
 import jodd.http.HttpRequest;
-import jodd.http.HttpResponse;
 import jodd.util.StringPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,17 +13,13 @@ import org.slf4j.LoggerFactory;
 /**
  * @Author: cp.Chen
  * @since:
- * @date: 2019-10-24 10:25
+ * @date: 2019-10-25 10:44
  */
-public class JoddDeleteExecutor extends AbstractDeleteExecutor {
+public class JoddDeleteExecutor extends AbstractExecutor {
     private static final Logger logger = LoggerFactory.getLogger(JoddDeleteExecutor.class);
 
-    public JoddDeleteExecutor(HttpService httpService) {
-        super(httpService);
-    }
-
     @Override
-    public String execute(String uri, String queryParam) {
+    protected String executeInternal(String uri, String queryParam) {
         if (queryParam != null) {
             if (uri.indexOf('?') == -1)
                 uri += '?';
@@ -33,14 +27,18 @@ public class JoddDeleteExecutor extends AbstractDeleteExecutor {
         }
 
         HttpRequest request = HttpRequest.delete(uri);
-        HttpResponse response = request
-                .timeout(httpService.getTimeout())
-                .send();
-        response.charset(StringPool.UTF_8);
-        String respBody = response.bodyText();
+        request.timeout(super.meta.getTimeout());
+        request.contentType(meta.getContentType());
+        if (super.meta.isSignature()) {
+            // 签名
+            super.signature(request);
+        }
+        jodd.http.HttpResponse httpResponse = request.send();
+        httpResponse.charset(StringPool.UTF_8);
+        String respBody = httpResponse.bodyText();
 
         try {
-            Response resp = Response.fromJson(respBody);
+            HttpResponse resp = HttpResponse.fromJson(respBody);
             if (resp.getCode() != null && !"0".equals(resp.getCode())) {
                 throw new HttpClientException(new HttpError(
                         resp.getRequestId(),
@@ -49,7 +47,12 @@ public class JoddDeleteExecutor extends AbstractDeleteExecutor {
                 ));
             }
             if (logger.isDebugEnabled()) {
-                logger.debug("\n[requestId]: {}\n[url]: {}\n[params]: {}\n[result]: {}", resp.getRequestId(), uri, queryParam, resp.getResult());
+                logger.debug(
+                        "\n[requestId]: {}\n[url]: {}\n[params]: {}\n[result]: {}",
+                        resp.getRequestId(),
+                        uri,
+                        queryParam,
+                        resp.getResult() == null ? resp.getMessage() : resp.getResult());
             }
             return resp.getResult();
         } catch (JSONException e) {

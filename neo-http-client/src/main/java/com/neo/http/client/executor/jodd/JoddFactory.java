@@ -11,21 +11,21 @@ public class JoddFactory extends Factory<String, String> {
 
     @Override
     public Executor<String, String> createGet() {
-        return new JoddGet();
+        return new JoddGetExecutor();
     }
 
     @Override
     public Executor<String, String> createPost() {
-        return new JoddPost();
+        return new JoddPostExecutor();
     }
 
     @Override
     public Executor<String, String> createPut() {
-        return new JoddPut();
+        return new JoddPutExecutor();
     }
 
     @Override
     public Executor<String, String> createDelete() {
-        return new JoddDelete();
+        return new JoddDeleteExecutor();
     }
 }

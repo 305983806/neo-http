@@ -1,11 +1,10 @@
 package com.neo.http.server.filter;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.neo.http.common.bean.HttpError;
+import com.neo.http.common.bean.HttpResponse;
 import com.neo.http.common.bean.SystemError;
 import com.neo.http.server.Constants;
-import com.neo.http.server.HttpResponse;
 import com.neo.http.server.filter.wrapper.ResponseWrapper;
 import com.neo.http.server.utils.ThreadMDCUtil;
 import org.slf4j.Logger;
@@ -55,14 +54,14 @@ public class HttpFilter implements Filter {
     protected String getStandardResponse(ResponseWrapper response) throws IOException {
         String body = new String(response.getContent(), "UTF-8");
         String code, message;
-        Object result = null;
+        String result = null;
 
         try {
             HttpError error = HttpError.fromJson(body);
             if (error.getCode() == null) {
                 code = SystemError.SYS_OK.getCode();
                 message = SystemError.SYS_OK.getMessage();
-                result = JSON.parseObject(body);
+                result = body;
             } else {
                 code = error.getCode();
                 message = error.getMessage();
