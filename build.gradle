@@ -1,4 +1,5 @@
 plugins {
+    id 'java'
     id 'maven'
 }
 
@@ -13,6 +14,7 @@ subprojects {
     sourceCompatibility = "${JDK}"
     repositories {
         jcenter()
+        maven { url 'http://repo.lonntec.cn/repository/maven-public/' }
     }
     dependencies {
         testImplementation "junit:junit:${JUNIT}"
@@ -23,3 +25,24 @@ subprojects {
 }
 
 dependencies {}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "http://repo.lonntec.cn/repository/maven-releases/") {
+                authentication(userName: "admin", password: "lonntecCom")
+            }
+            pom.version = "$project.version"
+            pom.artifactId = "$project.name"
+            pom.groupId = "$project.group"
+        }
+    }
+    dependencies {
+//        compile project(":neo-http-client")
+//        compile project(":neo-http-server")
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
