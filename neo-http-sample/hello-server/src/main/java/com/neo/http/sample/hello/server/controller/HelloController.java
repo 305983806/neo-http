@@ -37,7 +37,7 @@ public class HelloController {
 
     @PostMapping("/courses")
     public void createCourse(@RequestBody Courses courses) {
-        if (courses.getCourseList() == null || courses.getCourseList().size() == 0) {
+        if (courses.getCourses() == null || courses.getCourses().size() == 0) {
             throw new HelloException(HelloError.INVALID_PARAMETER);
         }
         System.out.println("保存 courses 成功。");

@@ -11,7 +11,7 @@ neo-http 除了是一套基于Http协议进行封装的远程调用组件，更�
 ## Get Started
 以下简易教程将引导你基于 Spring Boot 和 neo-http-server 完成构建 Web 服务。如需要更详尽的指引，请查阅[用户手册]()获取更多关于 neo-http 的内容。
 
-- [构建标准化 RESTful Web 服务]()    
+- [构建标准化 RESTful Web 服务](https://github.com/305983806/neo-http/wiki/%E6%9E%84%E5%BB%BA%E6%A0%87%E5%87%86%E5%8C%96-RESTful-Web-%E6%9C%8D%E5%8A%A1)    
 学习如何利用 neo-http-server 构建一个规范化和带有统一响应结果与异常处理的 RESTful web service。
 
 - [构建标准化 RESTful Web 请求客户端]()    

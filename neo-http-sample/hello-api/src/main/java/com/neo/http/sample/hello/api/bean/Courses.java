@@ -13,12 +13,12 @@ import java.util.Set;
  */
 public class Courses implements Serializable {
 
-    private List<Course> courseList;
+    private List<Course> courses;
 
     public Courses() {}
 
-    public Courses(List<Course> courseList) {
-        this.courseList = courseList;
+    public Courses(List<Course> courses) {
+        this.courses = courses;
     }
 
     public static Courses fromJson(String json) {
@@ -29,11 +29,11 @@ public class Courses implements Serializable {
         return JSON.toJSONString(this);
     }
 
-    public void setCourseList(List<Course> courseList) {
-        this.courseList = courseList;
+    public List<Course> getCourses() {
+        return courses;
     }
 
-    public List<Course> getCourseList() {
-        return courseList;
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
     }
 }
