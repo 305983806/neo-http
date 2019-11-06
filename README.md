@@ -16,18 +16,3 @@ neo-http 除了是一套基于Http协议进行封装的远程调用组件，更�
 
 - [构建 web 请求客户端](https://github.com/305983806/neo-http/wiki/%E6%9E%84%E5%BB%BA-web-%E8%AF%B7%E6%B1%82%E5%AE%A2%E6%88%B7%E7%AB%AF)
 学习如何利用 neo-http-client 构建一个 Http 请求客户端，和如何配合服务端的请求签名机制，实现请求加签。
-
-整体引入
-```groovy
-compile 'com.neo:neo-http:0.1.0'
-```
-
-仅引入服务端
-```groovy
-compile 'com.neo:neo-http-server:0.1.0'
-```
-
-仅引入客户端
-```groovy
-compile 'com.neo:neo-http-client:0.1.0'
-```
