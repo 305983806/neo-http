@@ -18,6 +18,7 @@ public class DefaultConfig {
 //        return new SignatureHttpFilter("hello");
 //    }
 
+    @Bean
     public HttpFilter httpFilter() {
         return new HttpFilter();
     }

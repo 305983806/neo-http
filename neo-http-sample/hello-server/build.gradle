@@ -3,8 +3,8 @@ dependencies {
     compile("com.alibaba:fastjson:${FASTJSON}")
     compile ("org.springframework.boot:spring-boot-starter-web:${SPRINGBOOT}")
     compile ("org.springframework.boot:spring-boot-starter-aop:${SPRINGBOOT}")
-    compile ("com.neo:neo-http-server:0.1.0")
+//    compile ("com.neo:neo-http-server:0.1.0")
 
-//    compile project(":neo-http-server")
+    compile project(":neo-http-server")
     compile project(":neo-http-sample:hello-api")
 }

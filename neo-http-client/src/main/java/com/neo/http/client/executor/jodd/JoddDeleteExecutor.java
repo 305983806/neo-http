@@ -1,5 +1,6 @@
 package com.neo.http.client.executor.jodd;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.neo.http.client.executor.factory.AbstractExecutor;
 import com.neo.http.client.lang.HttpClientException;
@@ -54,7 +55,7 @@ public class JoddDeleteExecutor extends AbstractExecutor {
                         queryParam,
                         resp.getResult() == null ? resp.getMessage() : resp.getResult());
             }
-            return resp.getResult();
+            return JSON.toJSONString(resp.getResult());
         } catch (JSONException e) {
             return respBody;
         }

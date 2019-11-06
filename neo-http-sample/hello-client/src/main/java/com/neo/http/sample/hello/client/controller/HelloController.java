@@ -47,7 +47,7 @@ public class HelloController {
         }
         if (student != null) {
             Courses courses = helloHttpManager.getHelloService().getCourses(name);
-            student.setCourses(courses.getCourseList());
+            student.setCourses(courses.getCourses());
             return student;
         } else {
             throw new RuntimeException("该学生未注册。");
@@ -57,7 +57,7 @@ public class HelloController {
     @PostMapping("/student")
     public HttpResponse createStudent(@RequestBody Student student) {
         Courses courses = new Courses();
-        courses.setCourseList(student.getCourses());
+        courses.setCourses(student.getCourses());
         helloHttpManager.getHelloService().createCourses(courses);
         HttpResponse resp = new HttpResponse();
         resp.setCode("0");

@@ -1,5 +1,6 @@
 package com.neo.http.server.filter;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.neo.http.common.bean.HttpError;
 import com.neo.http.common.bean.HttpResponse;
@@ -82,7 +83,7 @@ public class HttpFilter implements Filter {
         newResp.setRequestId(ThreadMDCUtil.getRequestId());
         newResp.setCode(code);
         newResp.setMessage(message);
-        newResp.setResult(result);
+        newResp.setResult(JSON.parseObject(result));
         return newResp.toJson();
     }
 

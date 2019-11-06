@@ -1,5 +1,5 @@
 dependencies {
-    compile ("com.neo:neo-http-client:0.1.0")
+//    compile ("com.neo:neo-http-client:0.1.0")
 
-//    compile project(":neo-http-client")
+    compile project(":neo-http-client")
 }
