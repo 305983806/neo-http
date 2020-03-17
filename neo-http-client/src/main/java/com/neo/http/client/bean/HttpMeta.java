@@ -16,7 +16,8 @@ public class HttpMeta {
 
     private String endPoint;
     private int timeout = 10000;
-    private String contentType = ContentType.TEXT_XML;
+//    private String contentType = ContentType.TEXT_XML;
+    private String contentType;
     Map<String, String> headers = new HashMap<>();
 
     private boolean isSignature;

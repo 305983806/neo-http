@@ -8,6 +8,8 @@ import com.neo.http.client.executor.factory.Factory;
 import com.neo.http.client.executor.jodd.JoddFactory;
 import com.neo.http.client.lang.HttpClientException;
 
+import java.util.Map;
+
 /**
  * @Author: cp.Chen
  * @since:
@@ -59,6 +61,7 @@ public abstract class AbstractHttpManager implements HttpManager {
     @Override
     public String get(String url) {
         Executor<String, String> get = factory.createGet();
+        setContentType(ContentType.TEXT_XML);
         get.setMeta(meta);
         return get.execute(url, null);
     }
@@ -66,7 +69,8 @@ public abstract class AbstractHttpManager implements HttpManager {
     @Override
     public String post(String url, String postData) {
         Executor<String, String> post = factory.createPost();
-        meta.setContentType(ContentType.APPLICATION_JSON);
+        if (this.meta.getContentType() == null)
+        setContentType(ContentType.APPLICATION_JSON);
         post.setMeta(meta);
         return post.execute(url, postData);
     }
@@ -74,7 +78,7 @@ public abstract class AbstractHttpManager implements HttpManager {
     @Override
     public String put(String url, String putData) {
         Executor<String, String> put = factory.createPut();
-        meta.setContentType(ContentType.APPLICATION_JSON);
+        setContentType(ContentType.APPLICATION_JSON);
         put.setMeta(meta);
         return put.execute(url, putData);
     }
@@ -82,8 +86,19 @@ public abstract class AbstractHttpManager implements HttpManager {
     @Override
     public String delete(String url) {
         Executor<String, String> delete = factory.createDelete();
+        setContentType(ContentType.TEXT_XML);
         delete.setMeta(meta);
         return delete.execute(url, null);
+    }
+
+    @Override
+    public void setContentType(String contentType) {
+        this.meta.setContentType(contentType);
+    }
+
+    @Override
+    public void setHeaders(Map<String, String> headers) {
+        this.meta.setHeaders(headers);
     }
 
     @Override
@@ -91,7 +106,10 @@ public abstract class AbstractHttpManager implements HttpManager {
         return this.meta.getEndPoint();
     }
 
-    protected void setType(HttpType type) {
-        this.type = type;
+    private void doSetContentType(String contentType) {
+        if (this.meta.getContentType() == null || "".equals(this.meta.getContentType())) {
+            this.meta.setContentType(contentType);
+        }
     }
+
 }

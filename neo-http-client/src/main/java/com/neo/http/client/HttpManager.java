@@ -2,6 +2,8 @@ package com.neo.http.client;
 
 import com.neo.http.client.bean.HttpMeta;
 
+import java.util.Map;
+
 /**
  * @Author: cp.Chen
  * @since:
@@ -18,5 +20,9 @@ public interface HttpManager {
     String delete(String url);
 
     String getEndPoint();
+
+    void setHeaders(Map<String, String> headers);
+
+    void setContentType(String contentType);
 
 }

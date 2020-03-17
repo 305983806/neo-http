@@ -38,8 +38,8 @@ uploadArchives {
         }
     }
     dependencies {
-//        compile project(":neo-http-client")
-//        compile project(":neo-http-server")
+        compile project(":neo-http-client")
+        compile project(":neo-http-server")
     }
 }
 
