@@ -71,6 +71,10 @@ public class HttpMeta {
         this.headers = headers;
     }
 
+    public void putHeaders(String name, String value) {
+        this.headers.put(name,value);
+    }
+
     public boolean isSignature() {
         return isSignature;
     }

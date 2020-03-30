@@ -8,7 +8,7 @@ dependencies {
 uploadArchives {
     repositories {
         mavenDeployer {
-            repository(url: "http://repo.lonntec.cn/repository/maven-releases/") {
+            repository(url: "http://repo.iotube.cn/repository/maven-releases/") {
                 authentication(userName: "admin", password: "lonntecCom")
             }
             pom.version = "$project.version"

@@ -62,6 +62,7 @@ public abstract class AbstractHttpManager implements HttpManager {
     public String get(String url) {
         Executor<String, String> get = factory.createGet();
         setContentType(ContentType.TEXT_XML);
+        meta.getHeaders().clear();
         get.setMeta(meta);
         return get.execute(url, null);
     }
@@ -71,6 +72,7 @@ public abstract class AbstractHttpManager implements HttpManager {
         Executor<String, String> post = factory.createPost();
         if (this.meta.getContentType() == null)
         setContentType(ContentType.APPLICATION_JSON);
+        meta.getHeaders().clear();
         post.setMeta(meta);
         return post.execute(url, postData);
     }
@@ -79,6 +81,7 @@ public abstract class AbstractHttpManager implements HttpManager {
     public String put(String url, String putData) {
         Executor<String, String> put = factory.createPut();
         setContentType(ContentType.APPLICATION_JSON);
+        meta.getHeaders().clear();
         put.setMeta(meta);
         return put.execute(url, putData);
     }
@@ -87,6 +90,44 @@ public abstract class AbstractHttpManager implements HttpManager {
     public String delete(String url) {
         Executor<String, String> delete = factory.createDelete();
         setContentType(ContentType.TEXT_XML);
+        meta.getHeaders().clear();
+        delete.setMeta(meta);
+        return delete.execute(url, null);
+    }
+
+    @Override
+    public String get(String url, Map<String, String> headers) {
+        Executor<String, String> get = factory.createGet();
+        setContentType(ContentType.TEXT_XML);
+        meta.setHeaders(headers);
+        get.setMeta(meta);
+        return get.execute(url, null);
+    }
+
+    @Override
+    public String post(String url, String postData, Map<String, String> headers) {
+        Executor<String, String> post = factory.createPost();
+        if (this.meta.getContentType() == null)
+            setContentType(ContentType.APPLICATION_JSON);
+        meta.setHeaders(headers);
+        post.setMeta(meta);
+        return post.execute(url, postData);
+    }
+
+    @Override
+    public String put(String url, String putData, Map<String, String> headers) {
+        Executor<String, String> put = factory.createPut();
+        setContentType(ContentType.APPLICATION_JSON);
+        meta.setHeaders(headers);
+        put.setMeta(meta);
+        return put.execute(url, putData);
+    }
+
+    @Override
+    public String delete(String url, Map<String, String> headers) {
+        Executor<String, String> delete = factory.createDelete();
+        setContentType(ContentType.TEXT_XML);
+        meta.setHeaders(headers);
         delete.setMeta(meta);
         return delete.execute(url, null);
     }

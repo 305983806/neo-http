@@ -19,6 +19,14 @@ public interface HttpManager {
 
     String delete(String url);
 
+    String get(String url, Map<String, String> headers);
+
+    String post(String url, String postData, Map<String, String> headers);
+
+    String put(String url, String putData, Map<String, String> headers);
+
+    String delete(String url, Map<String, String> headers);
+
     String getEndPoint();
 
     void setHeaders(Map<String, String> headers);
