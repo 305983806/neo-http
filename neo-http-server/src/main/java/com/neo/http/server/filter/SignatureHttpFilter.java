@@ -126,7 +126,7 @@ public class SignatureHttpFilter extends HttpFilter {
             if (logger.isWarnEnabled()) {
                 String requestId = String.valueOf(UUID.randomUUID());
                 MDC.put("requestId", requestId);
-                logger.warn("The HTTP header argument \"{}\" parse error, please check the parameters.", DATE);
+                logger.error("The HTTP header argument \"{}\" parse error, please check the parameters.", DATE, e);
             }
             return false;
         }

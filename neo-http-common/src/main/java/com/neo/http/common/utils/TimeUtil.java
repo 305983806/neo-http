@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 /**
@@ -22,7 +23,7 @@ public class TimeUtil {
      * @return
      */
     public static String date2gmt (Date d) {
-        SimpleDateFormat sdf = new SimpleDateFormat(formatGMT);
+        SimpleDateFormat sdf = new SimpleDateFormat(formatGMT, Locale.ENGLISH);
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
         return sdf.format(d);
     }
@@ -35,7 +36,7 @@ public class TimeUtil {
      * @throws ParseException
      */
     public static Date gmt2date (String s) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat(formatGMT);
+        SimpleDateFormat sdf = new SimpleDateFormat(formatGMT, Locale.ENGLISH);
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
         return sdf.parse(s);
     }
